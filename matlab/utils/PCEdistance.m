@@ -1,20 +1,13 @@
-function affinity = PCEdistance(imgx, imgy)
+function distances = PCEdistance(imgx, imgy)
 %Evaluate the PCE distance between imgx and imgy (both PRNU noises)
-    
-   
-    noisex = imgx{1};
-    noisey = imgy{1};
-    
-    
-    affinity = 0;
-    if(size(noisex, 1) == size(noisey, 1) && size(noisex, 2) == size(noisey, 2))
+    distances = zeros(size(imgy, 1), 1);
+    for i = 1:size(imgy, 1)
+        noisex = imgx.PRNU;
+        noisey = imgy(i).PRNU;
         C = crosscorr(noisex, noisey);
         detection = PCE(C);
-        affinity = detection.PCE;
+        distances(i) = detection.PCE;
     end
-    
-    affinity
-    
     
 end
 

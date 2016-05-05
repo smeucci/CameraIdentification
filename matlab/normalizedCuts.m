@@ -1,4 +1,4 @@
-function [ output_args ] = normalizedCuts( input_args )
+function [ output_args ] = normalizedCuts(weights)
 %Normalized cuts algorithm
 
 
