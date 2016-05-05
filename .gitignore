@@ -1,2 +1,5 @@
 
 matlab/Images/*
+dataset/*
+*.m~
+matlab/rwt-master/bin/*
