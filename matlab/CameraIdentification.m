@@ -5,9 +5,9 @@ function [output] = CameraIdentification(imgpath, type, n, threads)
 %
 %   OUTPUT
 %   clustering matrix (?)
-%----------------------------------------------------
+% ----------------------------------------------------
 % Authors: Lorenzo Cioni, Saverio Meucci
-%----------------------------------------------------
+% ----------------------------------------------------
 
     addpath('utils');
     addpath('Functions');
