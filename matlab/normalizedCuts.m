@@ -1,4 +1,4 @@
-function [ output_args ] = normalizedCuts(weights)
+function [clusters] = normalizedCuts(weights)
 %Normalized cuts algorithm
 
 
