@@ -38,7 +38,7 @@ function [output] = CameraIdentification(imgpath, type, n, threads)
         %Check if there are pools opened
         pool = gcp('nocreate');
         if isempty(pool)
-            parpool('parallel', threads);
+            parpool('local', threads);
         else
             fprintf('Enabling pool of %d workers\n', pool.NumWorkers);
         end       
