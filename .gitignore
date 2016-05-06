@@ -2,6 +2,7 @@ mat/*
 matlab/Images/*
 dataset/*
 *.m~
+.gitignore~
 matlab/rwt-master/bin/*
 dataset
 
