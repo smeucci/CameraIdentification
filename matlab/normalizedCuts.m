@@ -14,6 +14,7 @@ function [U, S, degree] = normalizedCuts(weights)
     [s, i] = max(sum(S, 2));
     %Take the eigenvector associated to the second smallest eigenvalue
     u = U(:, i);
+    
     %Temporary; check if the solution found solves the equation
     delta = 10^-15; % precision
     if ((degree - weights) * u) - (s * degree * u) < delta
