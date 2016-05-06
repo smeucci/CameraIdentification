@@ -16,14 +16,14 @@ function [images] = getImagesPath(dataset_path, type, num)
 % Authors: Lorenzo Cioni, Saverio Meucci
 % ----------------------------------------------------  
 
-    % if argument 'num' is not set, it is equal to inf.
+    %If argument 'num' is not set, it is equal to inf.
     if nargin == 2
         num = Inf;
     end
 
     folders = dir(dataset_path);
 
-    % check that the passed type is acceptable, otherwise gives an error.
+    %Check that the passed type is acceptable, otherwise gives an error.
     if (~strcmp(type, 'imgs') && ~strcmp(type, 'imgs_nat') && ~strcmp(type, 'imgs_nat_fb') && ~strcmp(type, 'imgs_nat_fb_highres'))
         error('No matching type "%s" found.', type);
     end

@@ -176,6 +176,6 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
      
     %Starts normalized cuts algorithm
     %To be implemented
-    normalizedCuts(weights); 
+    %normalizedCuts(weights); 
     
 end
