@@ -171,7 +171,7 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
         fprintf('\nBuilding weights matrix total time: %.2f s\n', etime(clock, start_time));
     else
         load(['mat/' mat_images_weights]);
-        fprintf('\nWeights matrix loaded from file.');
+        fprintf('\nWeights matrix loaded from file.\n');
     end
      
     %Starts normalized cuts algorithm

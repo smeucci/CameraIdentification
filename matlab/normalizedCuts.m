@@ -18,9 +18,9 @@ function [U, S, degree] = normalizedCuts(weights)
     %Temporary; check if the solution found solves the equation
     delta = 10^-10; % precision
     if ((degree - weights) * u) - (s * degree * u) < delta
-       fprintf('Corretly solved\n'); 
+       fprintf('\nGeneralized eigensystem corretly solved\n'); 
     else
-       fprintf('Not solved\n');
+       fprintf('\nGeneralized eigensyste not solved\n');
     end
     
 end
