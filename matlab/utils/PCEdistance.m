@@ -6,8 +6,7 @@ function distances = PCEdistance(imgx, imgy)
         noisey = imgy(i).PRNU;
         C = crosscorr(noisex, noisey);
         detection = PCE(C);
-        distances(i) = detection.PCE;
+        distances(i) = log(1 + exp(detection.PCE));     
     end
-    
 end
 
