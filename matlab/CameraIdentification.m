@@ -30,7 +30,7 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
     checkThread = @(x) (x >= 1);
 
     addOptional(p,'ExtractNoise', defaultExtract, @(x) islogical(x));
-    addParameter(p,'Threads', defaultThreads, checkThread);
+    addOptional(p,'Threads', defaultThreads, checkThread);
     
     parse(p, varargin{:});
     extract_noise = p.Results.ExtractNoise;
