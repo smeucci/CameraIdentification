@@ -1,4 +1,5 @@
 mat/*
+matlab/mat/*
 matlab/Images/*
 dataset/*
 *.m~
