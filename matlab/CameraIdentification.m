@@ -176,6 +176,29 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
      
     %Starts normalized cuts algorithm
     %To be implemented
-    normalizedCuts(weights); 
+    normalizedCuts(weights);
+    
+    %% Saving fingerprints for clustered cameras
+    
+    %output is the vector of cluster identifier
+    output = zeros(length(n_images), 1);
+    
+    %only for debug
+    for i = 1:n_images
+       output(i) = randi(5, 1);
+    end
+    %end debug
+    
+    n_clusters = max(output);
+    
+    %Generating fingerprint for each clustered noises
+    for i = 1:n_images
+        images(i).camera = output(i);  
+    end
+    
+    for k = 1:n_clusters
+        idx = cellfun(@(x)isequal(x, k),{images.camera});
+        fingerprint = evaluateClusterFingerprint(images(idx)); 
+    end    
     
 end
