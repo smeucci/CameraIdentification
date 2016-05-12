@@ -3,7 +3,7 @@ function [value] = Ncut(weights, degree, eigenvector, threshold)
 %   Detailed explanation goes here
 
     %Split the vector eigenvector based on the threshold
-    split = eigenvector >= threshold;
+    split = eigenvector > threshold;
     
     %Save index of the two splitted sets
     positive = []; h = 1;
