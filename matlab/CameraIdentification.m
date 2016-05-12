@@ -55,10 +55,10 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
         
     fprintf('\nExtracting PRNU noise from %d images\n\n', n_images);
     
-    images = {};
+    images = cell(n_images, 1);
     for i = 1:n_images
-        images(i).name = filenames{i};
-        images(i).camera = i;
+        images{i}.name = filenames{i};
+        images{i}.camera = i;
     end
     clear filenames;
     
@@ -79,7 +79,7 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
         start_time = clock;
         for i = 1:n_images
             %Evaluate PRNU for single image
-            PRNU = NoiseExtractFromImage(images(i).name, 2);
+            PRNU = NoiseExtractFromImage(images{i}.name, 2);
             %Filtering image noise (clean up)
             PRNU = WienerInDFT(PRNU, std2(PRNU));  
             %Update idth and height for further resizing
@@ -115,7 +115,6 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
             counter = counter + 1;
             fprintf('Resized %d / %d images \n', counter, n_images);
         end
-        images = cell2mat(images);
     end
     
     
@@ -133,7 +132,6 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
         total_weights = (n_images^2 - n_images)/2 + n_images;
         for i = 1:n_images
             mat = matfile(['mat/image_prnu_' num2str(i) '.mat']);
-            %load();
             noisex = mat.PRNU;
             clear mat;
             for j = i:n_images     
@@ -162,6 +160,8 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Saving fingerprints for clustered cameras %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    images = cell2mat(images);
     
     n_clusters = length(clusters);
     
