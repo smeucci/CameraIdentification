@@ -1,27 +1,29 @@
-function [U, S, degree] = normalizedCuts(weights)
+function [eigenvector, eigenvalue, threshold] = normalizedCuts(weights, loc)
 %Normalized cuts algorithm
 
     %Compute degree matrix
-    degree = zeros(size(weights, 1), size(weights, 2));
-    s = sum(weights, 1);
-    for i = 1:size(weights, 1)
-        degree(i, i) = s(i);
-    end
+    degree = getDegreeMatrix(weights);
 
     %Solve the generalized eigenvalues problem
-    [U, S] = eigs(degree - weights, degree, 2, 'sm');
+    [eigenvectors, eigenvalues] = eigs(degree - weights, degree, 2, 'sm');
     %Take the second smallest eigenvalue
-    [s, i] = max(sum(S, 2));
+    [eigenvalue, i] = max(sum(eigenvalues, 2));
     %Take the eigenvector associated to the second smallest eigenvalue
-    u = U(:, i);
+    eigenvector = eigenvectors(:, i);
     
     %Temporary; check if the solution found solves the equation
     delta = 10^-15; % precision
-    if ((degree - weights) * u) - (s * degree * u) < delta
+    if ((degree - weights) * eigenvector) - (eigenvalue * degree * eigenvector) < delta
        fprintf('\nGeneralized eigensystem corretly solved\n'); 
     else
        fprintf('\nGeneralized eigensyste not solved\n');
     end
     
+    %Get best threshold value
+    threshold = computeBestThresholdValue(weights, degree, eigenvector);
+    
+    %Bipartition of the graph
+    split = eigenvector >= threshold;
+    [weights_A, weights_B, loc_A, loc_B] = bipartition(weights, split);
+    
 end
-
