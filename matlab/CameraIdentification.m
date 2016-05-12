@@ -45,7 +45,6 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
     addpath('ncuts');
     
     %Constants mat filenames
-    mat_images_noises = 'images_noises.mat';
     mat_images_weights = 'images_weights.mat';
     
     %Read image path looking for images
@@ -90,7 +89,7 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
                 width = size(PRNU, 2);
             end
                 
-            save(['mat/image_prnu_' num2str(i) '.mat'], 'PRNU');
+            save(['mat/image_prnu_' num2str(i) '.prnu'], 'PRNU');
             clear PRNU;
 
             counter = counter + 1;
@@ -105,13 +104,12 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
         fprintf('\nResizing noises to %d x %d\n\n', width, height);
         counter = 0;
         for i = 1:n_images
-            mat = matfile(['mat/image_prnu_' num2str(i) '.mat']);
-            PRNU = mat.PRNU;
+            load(['mat/image_prnu_' num2str(i) '.prnu'], '-mat');
             if(size(PRNU, 1) ~= height || size(PRNU, 2) ~= width)
                 PRNU = imresize(PRNU, [height width]);
             end
-            save(['mat/image_prnu_' num2str(i) '.mat'], 'PRNU');
-            clear mat PRNU;
+            save(['mat/image_prnu_' num2str(i) '.prnu'], 'PRNU');
+            clear PRNU;
             counter = counter + 1;
             fprintf('Resized %d / %d images \n', counter, n_images);
         end
@@ -131,15 +129,15 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
         counter = 0;
         total_weights = (n_images^2 - n_images)/2 + n_images;
         for i = 1:n_images
-            mat = matfile(['mat/image_prnu_' num2str(i) '.mat']);
-            noisex = mat.PRNU;
-            clear mat;
+            load(['mat/image_prnu_' num2str(i) '.prnu'], '-mat');
+            noisex = PRNU;
+            clear PRNU;
             for j = i:n_images     
-                mat = matfile(['mat/image_prnu_' num2str(j) '.mat']);
-                noisey = mat.PRNU;
+                load(['mat/image_prnu_' num2str(j) '.prnu'], '-mat');
+                noisey = PRNU;
+                clear PRNU;
                 weights(i, j) = PCEdistance(noisex, noisey);
-                weights(j, i) = weights(i, j);
-                clear mat;
+                weights(j, i) = weights(i, j);  
                 counter = counter + 1;
                 fprintf('Weights evaluated: %d / %.2f %%\r', counter, ...
                        (counter * 100/total_weights));
@@ -161,8 +159,7 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
     % Saving fingerprints for clustered cameras %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    images = cell2mat(images);
-    
+    images = cell2mat(images);   
     n_clusters = length(clusters);
     
     %Grouping clustered images
@@ -172,10 +169,17 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
             images(cluster(k)).camera = i;
         end     
     end
+    
+    fprintf('\nClustering done. Found %d clusters.\n', n_clusters);
+    fprintf('Evaluating camera fingerprints.\n');
 
     for k = 1:n_clusters
+        fprintf('\nExtracting fingerprint for camera %d\n', k);
+        start_time = clock;
         idx = cellfun(@(x) isequal(x, k), {images.camera});
         fingerprint = evaluateClusterFingerprint(images(idx)); 
+        save(['mat/cameras/camera_fingerprint_' num2str(k) '.mat'], 'fingerprint');
+        fprintf('Fingerprint extracted in: %.2f s\n', etime(clock, start_time));
     end    
     
 end
