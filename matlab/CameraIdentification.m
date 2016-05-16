@@ -56,7 +56,7 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
     
     images = cell(n_images, 1);
     for i = 1:n_images
-        images{i}.name = filenames{i};
+        images{i}.name = filenames(i).filename;
         images{i}.camera = i;
     end
     clear filenames;

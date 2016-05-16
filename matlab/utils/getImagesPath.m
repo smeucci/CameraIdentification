@@ -29,6 +29,8 @@ function [images] = getImagesPath(dataset_path, type, num)
     end
 
     images = {};
+    camera = 1;
+    index = 1;
     for i = 1:size(folders, 1)
 
         folder = folders(i);
@@ -44,15 +46,21 @@ function [images] = getImagesPath(dataset_path, type, num)
                h = h + 1;
                if (~strcmp(img.name(1), '.') && ~strcmp(img.name, '..') && ~img.isdir)  
                    img = [camera_path, '/', img.name];
-                   images = cat(1, images, img);
+                   images{index}.filename = img;
+                   images{index}.camera = camera;
+                   index = index + 1;
                    count = count + 1;
                end 
 
            end
+           
+           camera = camera + 1;
 
         end
 
     end
+    
+    images = cell2mat(images);
 
 end
 
