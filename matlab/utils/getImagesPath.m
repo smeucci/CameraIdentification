@@ -29,7 +29,6 @@ function [images] = getImagesPath(dataset_path, type, num)
     end
 
     images = {};
-    camera = 1;
     index = 1;
     for i = 1:size(folders, 1)
 
@@ -47,15 +46,13 @@ function [images] = getImagesPath(dataset_path, type, num)
                if (~strcmp(img.name(1), '.') && ~strcmp(img.name, '..') && ~img.isdir)  
                    img = [camera_path, '/', img.name];
                    images{index}.filename = img;
-                   images{index}.camera = camera;
+                   images{index}.camera = folder.name;
                    index = index + 1;
                    count = count + 1;
                end 
 
            end
            
-           camera = camera + 1;
-
         end
 
     end

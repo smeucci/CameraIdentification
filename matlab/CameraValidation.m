@@ -2,10 +2,15 @@ function [camera, affinity] = CameraValidation(image)
 %CAMERAVALIDATION Summary of this function goes here
 %   Detailed explanation goes here
 
+    addpath('utils');
+    addpath('Functions');
+    addpath('Filter');
+    addpath('rwt-master/bin');
+    
     fprintf('CameraValidation for image %s\n', image);
 
-    cameras = dir('mat/cameras/');
-    n_cameras = length(cameras) - 2;
+    camera_folder = dir('mat/cameras/');
+    n_cameras = length(camera_folder) - 2;
     
     fprintf('\nFound %d cameras\n', n_cameras);
     fprintf('\nSearch for best camera PRNU match...\n');
@@ -16,11 +21,12 @@ function [camera, affinity] = CameraValidation(image)
     fprintf('Camera processed: 0 / 0.00 %% - Elapsed time: 0.0 s\n');
     
     pce = zeros(length(n_cameras), 1);
+    cameras = cell(length(n_cameras), 1);
     
     for i = 1:n_cameras
-       load(['mat/cameras/camera_fingerprint_' num2str(i) '.mat'], 'fingerprint'); 
-       height = size(fingerprint, 1);
-       width = size(fingerprint, 2);
+       load(['mat/cameras/camera_' num2str(i) '.mat'], 'camera'); 
+       height = size(camera.fingerprint, 1);
+       width = size(camera.fingerprint, 2);
        
        I = double(rgb2gray(imread(image)));
        %Resize image if different size from fingerprint
@@ -36,16 +42,19 @@ function [camera, affinity] = CameraValidation(image)
            PRNU = imresize(PRNU, [height width]);
        end  
        
-       C = crosscorr(PRNU, I .* fingerprint);
+       C = crosscorr(PRNU, I .* camera.fingerprint);
        detection = PCE(C);
        pce(i) = detection.PCE;
+       cameras{i}.pce = pce(i);
+       cameras{i}.folder = camera.folder;
        counter = counter + 1;
        fprintf('Camera processed: %d / %.2f %%', counter, ...
                    (counter * 100/n_cameras));
        fprintf(' - Elapsed time: %.2f s\n', etime(clock, start_time));
     end
     
-    [affinity, camera] = max(pce);
+    [affinity, index] = max(pce);
+    camera = cameras{index}.folder;
     
 end
 

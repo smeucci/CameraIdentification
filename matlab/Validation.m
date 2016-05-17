@@ -2,24 +2,29 @@
 %    Validation script for camera images    %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+addpath('utils');
+
 imgpath = '../dataset';
-n = 1;
+n = 3;
 type = 'imgs';
 
-filenames = getImagesPath(imgpath, type, n); 
-n_images = length(filenames);
+images = getImagesPath(imgpath, type, n); 
+n_images = length(images);
 
-predictedLabels = zeros(length(n_images), 1);
-trueLabels = zeros(length(n_images), 1);
-for i = 1:n_images
-    [cam, ~] = CameraValidation(filenames(i).filename);
-    predictedLabels(i) = cam;
-    trueLabels(i) = filenames(i).camera;
-end
+predictedLabels = cell(length(n_images), 1);
+  for i = 1:n_images
+      [cam, ~] = CameraValidation(images(i).filename);
+      predictedLabels{i} = cam;
+  end
+  
+save('mat/labels.mat', 'predictedLabels');
 
-save ('mat/labels.mat', 'predictedLabels', 'trueLabels');
+load('mat/labels.mat', 'predictedLabels');
 
-load('mat/labels.mat', 'predictedLabels', 'trueLabels');
+[confusionMatrix, ~] = plotConfusionMatrix({images.camera}, predictedLabels, true, 'Confusion Matrix');
 
-predictedLabels
-trueLabels
+correctClassified = sum(diag(confusionMatrix));
+imageNumber = sum(confusionMatrix(:));
+fprintf('Correctly classified images: %d / %d\n', correctClassified, imageNumber);
+accuracy = correctClassified/imageNumber;
+fprintf('Accuracy: %.2f %%\n', accuracy * 100);

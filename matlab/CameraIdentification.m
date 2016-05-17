@@ -31,6 +31,7 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
     
     parse(p, varargin{:});
     extract_noise = p.Results.ExtractNoise;
+    cluster_info_validation = true;
     
     fprintf('Camera Identification\n');
     fprintf('  -Dataset path: %s\n', imgpath); 
@@ -57,6 +58,7 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
     images = cell(n_images, 1);
     for i = 1:n_images
         images{i}.name = filenames(i).filename;
+        images{i}.folder = filenames(i).camera;
         images{i}.camera = i;
     end
     clear filenames;
@@ -177,8 +179,8 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
         fprintf('\nExtracting fingerprint for camera %d\n', k);
         start_time = clock;
         idx = cellfun(@(x) isequal(x, k), {images.camera});
-        fingerprint = evaluateClusterFingerprint(images(idx)); 
-        save(['mat/cameras/camera_fingerprint_' num2str(k) '.mat'], 'fingerprint');
+        camera = evaluateClusterFingerprint(images(idx), cluster_info_validation);
+        save(['mat/cameras/camera_' num2str(k) '.mat'], 'camera');
         fprintf('Fingerprint extracted in: %.2f s\n', etime(clock, start_time));
     end    
     
