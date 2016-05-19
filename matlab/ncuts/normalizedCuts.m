@@ -1,6 +1,30 @@
 function [segments, ids] = normalizedCuts(weights, varargin)
-%NORMALIZEDCUTS Summary of this function goes here
-%   Detailed explanation goes here
+% Normalized Cuts algorithm.
+%
+%   INPUTS
+%   Required parameters
+%
+%   weights  : matrix of weights for the grapth
+%   
+%   Optional parameters (key, value)
+%   
+%   'Verbose'  : true/false if information about clustering should be
+%                printed (default true)
+%   'Type'     : which threshold value consider to stop recursion.
+%                Possible value are 'NC' for ncut value and 'AC' for
+%                aggregation coefficient. (default 'NC')
+%   'Threshold': precomputed treshold value Default 10^-4 for NC. Not
+%                an optional parameters for type 'AC' (range [0, 1])
+%
+%   USAGE  output = normalizedCuts(weights, 'Type', 'AC', 'Threshold',
+%                   0.9966, 'Verbose', true);
+%
+%   OUTPUT
+%   segments : a cell array of vectors contains ids, represents the clusters   
+%
+% ----------------------------------------------------
+% Authors: Lorenzo Cioni, Saverio Meucci
+% ----------------------------------------------------
 
     p = inputParser;
     p.KeepUnmatched = true;
