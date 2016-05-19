@@ -1,4 +1,4 @@
-function [output] = CameraIdentification(imgpath, type, n, varargin)
+function [output] = CameraIdentification(imgpath, type, varargin)
 % Camera images clustering for camera identification
 %
 %   INPUTS
@@ -26,17 +26,24 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
     p = inputParser;
     p.KeepUnmatched = true;
     defaultExtract = false;
+    defaultNumFolder = Inf;
+    defaultNumImages = Inf;
 
+    addOptional(p,'NumFolders', defaultNumFolder, @(x) isnumeric(x));
+    addOptional(p,'NumImages', defaultNumImages, @(x) isnumeric(x));
     addOptional(p,'ExtractNoise', defaultExtract, @(x) islogical(x));
     
     parse(p, varargin{:});
     extract_noise = p.Results.ExtractNoise;
+    numFolders = p.Results.NumFolders;
+    numImages = p.Results.NumImages;
     cluster_info_validation = true;
     
     fprintf('Camera Identification\n');
     fprintf('  -Dataset path: %s\n', imgpath); 
-    fprintf('  -Type: %s\n', type); 
-    fprintf('  -Number of images per folder: %d\n', n);
+    fprintf('  -Type: %s\n', type);
+    fprintf('  -Number of folders: %d\n', numFolders);
+    fprintf('  -Number of images per folder: %d\n', numImages);
     fprintf('  -Extract noise: %d\n', extract_noise);
 
     addpath('utils');
@@ -49,7 +56,7 @@ function [output] = CameraIdentification(imgpath, type, n, varargin)
     mat_images_weights = 'images_weights.mat';
     
     %Read image path looking for images
-    filenames = getImagesPath(imgpath, type, n); 
+    filenames = getImagesPath(imgpath, type, 'NumFolders', numFolders, 'NumImages', numImages); 
         
     n_images = length(filenames);
         
