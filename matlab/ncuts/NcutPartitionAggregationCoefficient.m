@@ -1,6 +1,6 @@
-function [segments] = NcutPartition(I, weights, id, th_ncut, verbose)
-%Normalized cuts algorithm using ncut value of the bipartition to stop
-%recursion.
+function [segments] = NcutPartitionAggregationCoefficient(I, weights, id, th_recursion, verbose)
+%Normalized cuts algorithm using aggregation coefficients as threshold
+%value to stop recursion.
 
     if verbose
         fprintf('ID %s: ', id);
@@ -31,19 +31,17 @@ function [segments] = NcutPartition(I, weights, id, th_ncut, verbose)
     
     ac_A = aggregationCoefficient(weights(A, A));
     ac_B = aggregationCoefficient(weights(B, B));
+    %Check if recursion must be stopped
     
-    %Check if recursion must be stopped: size of partition too small or
-    %ncut value for current partition smaller than a threshold ncut value
-    ncut = Ncut(weights, degree, eigenvector, threshold);
-    if ncut > th_ncut
-        %Assign images to returned clusters
-        segments{1} = I;
-        return;
-    end    
+    segments_A = {I(A)};
+    if ac_A < th_recursion
+        segments_A = NcutPartitionAggregationCoefficient(I(A), weights(A, A), [id, '-A'], th_recursion, verbose);
+    end
     
-    %Recursion
-    segments_A = NcutPartition(I(A), weights(A, A), [id, '-A'], th_ncut, verbose);
-    segments_B = NcutPartition(I(B), weights(B, B), [id, '-B'], th_ncut, verbose);
+    segments_B = {I(B)};
+    if ac_B < th_recursion
+        segments_B = NcutPartitionAggregationCoefficient(I(B), weights(B, B), [id, '-B'], th_recursion, verbose);
+    end
 
     %Concatenate segments and ids
     segments = [segments_A, segments_B];
