@@ -1,4 +1,4 @@
-function [segments, ids] = normalizedCuts(weights, varargin)
+function segments = normalizedCuts(weights, varargin)
 % Normalized Cuts algorithm.
 %
 %   INPUTS
