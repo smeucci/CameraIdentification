@@ -43,10 +43,14 @@ function [segments, ids] = normalizedCuts(weights, varargin)
     id = 'root';
     I = 1:size(weights, 1);
     if strcmp(type, 'AC')
-        fprintf('\n- Normalized Cuts using aggregation coefficients\n');
+        if verbose
+            fprintf('\n- Normalized Cuts using aggregation coefficients\n\n');
+        end
         segments = NcutPartitionAggregationCoefficient(I, weights, id, threshold, verbose);
     else
-        fprintf('\n- Normalized Cuts using ncut value\n');
+        if verbose
+            fprintf('\n- Normalized Cuts using ncut value\n\n');
+        end
         segments = NcutPartition(I, weights, id, threshold, verbose);
     end
        
