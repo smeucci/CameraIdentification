@@ -11,10 +11,7 @@ function [camera, affinity] = CameraValidation(image)
 
     camera_folder = dir('mat/cameras/');
     n_cameras = length(camera_folder) - 2;
-    
-    %fprintf('\nFound %d cameras\n', n_cameras);
-    %fprintf('\nSearch for best camera PRNU match...\n');
-             
+
     pce = zeros(length(n_cameras), 1);
     cameras = cell(length(n_cameras), 1);
     
