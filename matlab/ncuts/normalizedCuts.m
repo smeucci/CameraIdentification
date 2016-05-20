@@ -9,17 +9,18 @@ function [segments, ids] = normalizedCuts(weights, varargin)
 %   Optional parameters (key, value)
 %   
 %   'Verbose'  : true/false if information about clustering should be
-%                printed (default true)
+%                printed (default false)
 %   'Type'     : which threshold value consider to stop recursion.
 %                Possible value are 'NC' for ncut value and 'AC' for
 %                aggregation coefficient. (default 'NC')
-%   'Threshold': precomputed treshold value Default 10^-4 for NC. Not
+%   'Threshold': precomputed treshold value. Default 10^-4 for NC. Not
 %                an optional parameters for type 'AC' (range [0, 1])
 %
 %   USAGE  output = normalizedCuts(weights, 'Type', 'AC', 'Threshold',
 %                   0.9966, 'Verbose', true);
 %
 %   OUTPUT
+%
 %   segments : a cell array of vectors contains ids, represents the clusters   
 %
 % ----------------------------------------------------
@@ -42,10 +43,10 @@ function [segments, ids] = normalizedCuts(weights, varargin)
     id = 'root';
     I = 1:size(weights, 1);
     if strcmp(type, 'AC')
-        fprintf('\n-Normalized Cuts using aggregation coefficients\n');
+        fprintf('\n- Normalized Cuts using aggregation coefficients\n');
         segments = NcutPartitionAggregationCoefficient(I, weights, id, threshold, verbose);
     else
-        fprintf('\n-Normalized Cuts using ncut value\n');
+        fprintf('\n- Normalized Cuts using ncut value\n');
         segments = NcutPartition(I, weights, id, threshold, verbose);
     end
        

@@ -9,7 +9,6 @@ function [segments] = NcutPartitionAggregationCoefficient(I, weights, id, th_rec
 
     if length(I) < 2
         segments{1} = I;
-        ids{1} = id;
         return;
     end
 
@@ -43,7 +42,6 @@ function [segments] = NcutPartitionAggregationCoefficient(I, weights, id, th_rec
         segments_B = NcutPartitionAggregationCoefficient(I(B), weights(B, B), [id, '-B'], th_recursion, verbose);
     end
 
-    %Concatenate segments and ids
     segments = [segments_A, segments_B];
     
 end

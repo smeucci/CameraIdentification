@@ -9,7 +9,6 @@ function [segments] = NcutPartition(I, weights, id, th_ncut, verbose)
 
     if length(I) < 2
         segments{1} = I;
-        ids{1} = id;
         return;
     end
 

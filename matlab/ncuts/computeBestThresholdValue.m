@@ -6,7 +6,6 @@ function [threshold] = computeBestThresholdValue(weights, degree, eigenvector)
     for i = 1:size(eigenvector, 1)
         
         value = Ncut(weights, degree, eigenvector, eigenvector(i));
-        
         if value < min_value
            min_value = value;
            threshold = eigenvector(i);
