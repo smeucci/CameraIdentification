@@ -28,14 +28,9 @@ function [segments] = NcutPartition(I, weights, id, th_ncut, verbose)
     %Bipartition of the graph
     [A, B] = bipartition(eigenvector, threshold);
     
-    ac_A = aggregationCoefficient(weights(A, A));
-    ac_B = aggregationCoefficient(weights(B, B));
-    
-    %Check if recursion must be stopped: size of partition too small or
-    %ncut value for current partition smaller than a threshold ncut value
+    %Check if recursion must be stopped
     ncut = Ncut(weights, degree, eigenvector, threshold);
     if ncut > th_ncut
-        %Assign images to returned clusters
         segments{1} = I;
         return;
     end    

@@ -30,8 +30,8 @@ function [segments] = NcutPartitionAggregationCoefficient(I, weights, id, th_rec
     
     ac_A = aggregationCoefficient(weights(A, A));
     ac_B = aggregationCoefficient(weights(B, B));
-    %Check if recursion must be stopped
     
+    %Check if recursion must be stopped
     segments_A = {I(A)};
     if ac_A < th_recursion
         segments_A = NcutPartitionAggregationCoefficient(I(A), weights(A, A), [id, '-A'], th_recursion, verbose);
