@@ -10,3 +10,5 @@ dataset
 matlab/mat/images_noises.mat
 
 matlab/mat/images_weights.mat
+
+matlab/clusters.txt

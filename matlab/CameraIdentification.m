@@ -123,8 +123,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
             fprintf('Resized %d / %d images \n', counter, n_images);
         end
     end
-    
-    
+       
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %           Evaluating weights              %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -159,16 +158,21 @@ function [output] = CameraIdentification(imgpath, type, varargin)
         fprintf('Weights matrix loaded from file.\n');
     end
      
+    images = cell2mat(images);
+    
     %Starts normalized cuts algorithm
     %To be implemented
-    [clusters, ~] = normalizedCuts(weights);
+    clusters = normalizedCuts(weights);
     clear weights;
+    
+    %Store table of the results of clustering operations
+    storeEvaluatedClusters(images, clusters);
+    [P, R, A] = validateClusterResults(images, clusters)
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Saving fingerprints for clustered cameras %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    images = cell2mat(images);   
+          
     n_clusters = length(clusters);
     
     %Grouping clustered images
