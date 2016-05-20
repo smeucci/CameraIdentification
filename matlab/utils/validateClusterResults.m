@@ -4,6 +4,7 @@ function [precision, recall, accuracy] = validateClusterResults(images, clusters
     precisions = zeros(length(clusters), 1);
     recalls = zeros(length(clusters), 1);
     accuracies = zeros(length(clusters), 1);
+    
     for i = 1:length(clusters) 
         clust = clusters{i};
         dim = length(clust);
@@ -21,11 +22,13 @@ function [precision, recall, accuracy] = validateClusterResults(images, clusters
         fn = total - tp;
         tn = length(images) - dim - fn;
         
+        %Storing measures
         precisions(i) = tp / (tp + fp);
         recalls(i) = tp / (tp + fn);
         accuracies(i) = (tp + tn) / (tp + tn + fp + fn);
     end
 
+    %Means of precisions, recalls and accuracies of each cluster
     precision = mean(precisions);
     recall = mean(recalls);
     accuracy = mean(accuracies);

@@ -167,7 +167,6 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     
     %Store table of the results of clustering operations
     storeEvaluatedClusters(images, clusters);
-    [P, R, A] = validateClusterResults(images, clusters)
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Saving fingerprints for clustered cameras %
