@@ -33,8 +33,8 @@ function [threshold, accuracy] = crossvalidateThreshold(imgpath, numFolders, num
     
     for i = 1:length(range)
         th = range(i);
-        fprintf('Setting threshold to: %f\n', th);
-        clusters = normalizedCuts(weights, 'Type', type, 'Threshold', th);
+        fprintf('Setting threshold to: %f - ', th);
+        clusters = normalizedCuts(weights, 'Type', type, 'Threshold', th, 'Verbose', false);
         [P, R, A] = validateClusterResults(images, clusters);
         fprintf('Precision: %f, Recall: %f, Accuracy: %f\n', P, R, A);
         thresholds(i) = th;
