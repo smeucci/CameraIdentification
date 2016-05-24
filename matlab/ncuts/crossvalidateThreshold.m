@@ -46,6 +46,7 @@ function [threshold, accuracy] = crossvalidateThreshold(imgpath, numFolders, num
         end
     end
     
+    save(['mat/threshold_crossvalidation' type '.mat'], 'thresholds', 'accuracies');
     plot(thresholds, accuracies);
 
 end
