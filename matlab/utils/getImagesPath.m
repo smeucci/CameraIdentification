@@ -82,7 +82,7 @@ function [images] = getImagesPath(dataset_path, type, varargin)
            end
            
         end
-        folder
+        
         i = i + 1;
     end
     
