@@ -28,15 +28,18 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     defaultExtract = false;
     defaultNumFolder = Inf;
     defaultNumImages = Inf;
+    defaultRandom = false;
 
     addOptional(p,'NumFolders', defaultNumFolder, @(x) isnumeric(x));
     addOptional(p,'NumImages', defaultNumImages, @(x) isnumeric(x));
     addOptional(p,'ExtractNoise', defaultExtract, @(x) islogical(x));
+    addOptional(p,'Random', defaultRandom, @(x) islogical(x));
     
     parse(p, varargin{:});
     extract_noise = p.Results.ExtractNoise;
     numFolders = p.Results.NumFolders;
     numImages = p.Results.NumImages;
+    random = p.Results.Random;
     cluster_info_validation = true;
     
     fprintf('Camera Identification\n');
@@ -45,6 +48,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     fprintf('  -Number of folders: %d\n', numFolders);
     fprintf('  -Number of images per folder: %d\n', numImages);
     fprintf('  -Extract noise: %d\n', extract_noise);
+    fprintf('  -Random images selection: %d\n', random);
 
     addpath('utils');
     addpath('Functions');
@@ -56,7 +60,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     mat_images_weights = 'images_weights.mat';
     
     %Read image path looking for images
-    filenames = getImagesPath(imgpath, type, 'NumFolders', numFolders, 'NumImages', numImages); 
+    filenames = getImagesPath(imgpath, type, 'NumFolders', numFolders, 'NumImages', numImages, 'Random', random); 
         
     n_images = length(filenames);
         
@@ -157,6 +161,10 @@ function [output] = CameraIdentification(imgpath, type, varargin)
         load(['mat/' mat_images_weights], 'weights');
         fprintf('Weights matrix loaded from file.\n');
     end
+    
+    if extract_noise
+        return;
+    end
      
     images = cell2mat(images);
     
@@ -184,6 +192,10 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     
     fprintf('\nClustering done. Found %d clusters.\n', n_clusters);
     fprintf('Evaluating camera fingerprints.\n');
+    
+    if ~exist('mat/cameras', 'dir')
+        mkdir('mat/cameras');
+    end
 
     for k = 1:n_clusters
         fprintf('\nExtracting fingerprint for camera %d\n', k);
@@ -193,5 +205,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
         save(['mat/cameras/camera_' num2str(k) '.mat'], 'camera');
         fprintf('Fingerprint extracted in: %.2f s\n', etime(clock, start_time));
     end    
+    
+    fprintf('\n\nCamera extraction finished!');
     
 end
