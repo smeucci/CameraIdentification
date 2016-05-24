@@ -44,7 +44,7 @@ function [images] = getImagesPath(dataset_path, type, varargin)
     numFolders = min(size(folders, 1), numFolders);
     folderCounter = 0;
     i = uint8(1);
-    while i < size(folders, 1) && folderCounter < numFolders
+    while i <= size(folders, 1) && folderCounter <= numFolders
         
         folder = folders(i);
         if (~strcmp(folder.name, '.') && ~strcmp(folder.name, '..') && folder.isdir)
@@ -82,7 +82,7 @@ function [images] = getImagesPath(dataset_path, type, varargin)
            end
            
         end
-        
+        folder
         i = i + 1;
     end
     
