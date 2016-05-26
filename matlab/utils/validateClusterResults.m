@@ -5,13 +5,18 @@ function [precision, recall, accuracy] = validateClusterResults(images, clusters
     recalls = zeros(length(clusters), 1);
     accuracies = zeros(length(clusters), 1);
     
-    for i = 1:length(clusters) 
-        clust = clusters{i};
-        dim = length(clust);
-        labels = {images(clust).folder};
-        counts = cellfun(@(x) sum(ismember(labels, x)), labels);
-        [best, idx] = max(counts);
-        total = sum(strcmp(labels(idx), {images.folder}));
+    total_labels = unique({images.folder});
+    for l = 1:length(total_labels)
+        gt_label = find( cellfun(@(x) strcmp(x, total_labels(l)), {images.folder}));
+        intersections = zeros(length(clusters), 1);
+        for i = 1:length(clusters)
+            clust = clusters{i};
+            I = intersect(clust, gt_label);
+            intersections(i) = length(I);
+        end
+        
+        [best, idx] = max(intersections);
+        dim = length(clusters{idx});
         if best ~= dim
             tp = best;
             fp = dim - tp;
@@ -19,13 +24,14 @@ function [precision, recall, accuracy] = validateClusterResults(images, clusters
             tp = dim;
             fp = 0;
         end  
-        fn = total - tp;
+        fn = length(gt_label) - tp;
         tn = length(images) - dim - fn;
         
         %Storing measures
-        precisions(i) = tp / (tp + fp);
-        recalls(i) = tp / (tp + fn);
-        accuracies(i) = (tp + tn) / (tp + tn + fp + fn);
+        precisions(l) = tp / (tp + fp);
+        recalls(l) = tp / (tp + fn);
+        accuracies(l) = (tp + tn) / (tp + tn + fp + fn);
+        
     end
 
     %Means of precisions, recalls and accuracies of each cluster
