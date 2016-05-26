@@ -13,7 +13,7 @@ function segments = normalizedCuts(weights, varargin)
 %   'Type'     : which threshold value consider to stop recursion.
 %                Possible value are 'NC' for ncut value and 'AC' for
 %                aggregation coefficient. (default 'NC')
-%   'Threshold': precomputed treshold value. Default 10^-4 for NC. Not
+%   'Threshold': precomputed treshold value. Default 10^-5 for NC. Not
 %                an optional parameters for type 'AC' (range [0, 1])
 %
 %   USAGE  output = normalizedCuts(weights, 'Type', 'AC', 'Threshold',
@@ -31,7 +31,7 @@ function segments = normalizedCuts(weights, varargin)
     p.KeepUnmatched = true;
     defaultExtract = false;
     defaultType = 'NC';
-    defaultThreshold = 10^-4;
+    defaultThreshold = 10^-5;
     addOptional(p, 'Verbose', defaultExtract, @(x) islogical(x));
     addOptional(p, 'Type', defaultType, @(x) ischar(x));
     addOptional(p, 'Threshold', defaultThreshold, @(x) isnumeric(x));

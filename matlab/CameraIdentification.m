@@ -70,7 +70,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     for i = 1:n_images
         images{i}.name = filenames(i).filename;
         images{i}.folder = filenames(i).camera;
-        images{i}.camera = i;
+        images{i}.camera = [];
     end
     clear filenames;
     
@@ -93,7 +93,9 @@ function [output] = CameraIdentification(imgpath, type, varargin)
             %Evaluate PRNU for single image
             PRNU = NoiseExtractFromImage(images{i}.name, 2);
             %Filtering image noise (clean up)
-            PRNU = WienerInDFT(PRNU, std2(PRNU));  
+            PRNU = WienerInDFT(PRNU, std2(PRNU));
+            %Detect orientation
+            PRNU = detectOrientation(PRNU);
             %Update idth and height for further resizing
             if size(PRNU, 1) < height && size(PRNU, 1) > minHeightThreshold
                 height = size(PRNU, 1);
@@ -160,10 +162,6 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     else
         load(['mat/' mat_images_weights], 'weights');
         fprintf('Weights matrix loaded from file.\n');
-    end
-    
-    if extract_noise
-        return;
     end
      
     images = cell2mat(images);
