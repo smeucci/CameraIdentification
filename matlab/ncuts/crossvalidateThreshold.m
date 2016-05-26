@@ -1,4 +1,4 @@
-function [threshold, accuracy] = crossvalidateThreshold(imgpath, numFolders, numImages, weights, range, type)
+function [threshold, precision] = crossvalidateThreshold(imgpath, numFolders, numImages, weights, range, type)
 % Find optimal threshold for normalized cuts algorithm
 %
 %   INPUTS
@@ -22,7 +22,7 @@ function [threshold, accuracy] = crossvalidateThreshold(imgpath, numFolders, num
     
     images = cell2mat(images);
     
-    accuracy = 0;
+    precision = 0;
     %Default value
     threshold = 10^-4;
     
@@ -30,6 +30,8 @@ function [threshold, accuracy] = crossvalidateThreshold(imgpath, numFolders, num
     
     thresholds = zeros(length(range), 1);
     accuracies = zeros(length(range), 1);
+    precisions = zeros(length(range), 1);
+    recalls = zeros(length(range), 1);
     
     for i = 1:length(range)
         th = range(i);
@@ -39,15 +41,19 @@ function [threshold, accuracy] = crossvalidateThreshold(imgpath, numFolders, num
         fprintf('Precision: %f, Recall: %f, Accuracy: %f\n', P, R, A);
         thresholds(i) = th;
         accuracies(i) = A;
-        if A > accuracy
-           accuracy = A;
+        precisions(i) = P;
+        recalls(i) = R;
+        if P > precision
+           precision = P;
            threshold = th;
            fprintf('New best threshold found!\n');
         end
     end
     
-    save(['mat/threshold_crossvalidation' type '.mat'], 'thresholds', 'accuracies');
+    save(['mat/threshold_crossvalidation' type '.mat'], 'thresholds', 'accuracies', 'precisions', 'recalls');
+    plot(thresholds, precisions);
     plot(thresholds, accuracies);
+    plot(thresholds, recalls);
 
 end
 
