@@ -39,7 +39,7 @@ function [RP,LP,ImagesinRP] = getFingerprint(Images,sigma)
 % [1] M. Goljan, T. Filler, and J. Fridrich. Large Scale Test of Sensor 
 % Fingerprint Camera Identification. In N.D. Memon and E.J. Delp and P.W. Wong and 
 % J. Dittmann, editors, Proc. of SPIE, Electronic Imaging, Media Forensics and 
-% Security XI, volume 7254, pages % 0I–01–0I–12, January 2009.
+% Security XI, volume 7254, pages % 0Iï¿½01ï¿½0Iï¿½12, January 2009.
 % -------------------------------------------------------------------------
 
 database_size = length(Images);             % Number of the images
@@ -59,6 +59,7 @@ for i=1:database_size
         im = Images{i};
     end
     X = imread(im); 
+    X = detectOrientation(X);  %Rotate image if in portrait mode
     X = double255(X);
     if t==0
         [M,N,three]=size(X);
