@@ -57,6 +57,7 @@ function [confusionMatrix] = Validation(imgpath, type, varargin)
       end
 
     save('mat/predictedLabels.mat', 'predictedLabels');
+    save('mat/images_list.mat', 'images');
 
     %load('mat/labels.mat', 'predictedLabels');
 
