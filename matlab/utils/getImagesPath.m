@@ -52,6 +52,15 @@ function [images] = getImagesPath(dataset_path, type, varargin)
            folderCounter = folderCounter + 1;     
            camera_path = [dataset_path, '/', folder.name, '/', type];
            imgs = dir(camera_path);
+           
+           idk = 1;
+           for k = 1:size(imgs, 1);
+              if (strcmp(imgs(k).name(1), '.') || strcmp(imgs(k).name, '..') || imgs(k).isdir)
+                 to_del(idk) = k;
+                 idk = idk + 1;
+              end
+           end
+           imgs(to_del) = [];
 
            count = 0; h = 1;
            
@@ -69,15 +78,15 @@ function [images] = getImagesPath(dataset_path, type, varargin)
 
                end
            else
-              randomIndeces = randi([4 size(imgs, 1)], 1, numImages);
+              randomIndeces = randperm(size(imgs, 1));
+              randomIndeces = randomIndeces(1:numImages);
               for r = 1:length(randomIndeces)
-                  img = imgs(randomIndeces(r));
-                  if (~strcmp(img.name(1), '.') && ~strcmp(img.name, '..') && ~img.isdir)  
-                       img = [camera_path, '/', img.name];
-                       images{index}.filename = img;
-                       images{index}.camera = folder.name;
-                       index = index + 1;
-                  end 
+                  img = imgs(randomIndeces(r)); 
+                  img = [camera_path, '/', img.name];
+                  images{index}.filename = img;
+                  images{index}.camera = folder.name;
+                  index = index + 1;
+              
               end
            end
            
