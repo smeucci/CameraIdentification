@@ -12,3 +12,11 @@ matlab/mat/images_noises.mat
 matlab/mat/images_weights.mat
 
 matlab/clusters.txt
+
+docs/*.aux
+
+docs/*.log
+
+docs/*.pdf
+
+docs/*.synctex.gz
