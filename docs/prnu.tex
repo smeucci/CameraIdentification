@@ -1,4 +1,39 @@
-\section{PRNU}
+\section{Il \emph{pattern noise}}
+
+Durante tutto il processo di acquisizione ed elaborazione, l'immagine può essere affetta da rumore. 
+In particolare, ogni fotocamera digitale possiede un sensore
+lievemente differente dalle altre dello stesso modello, per via di un \emph{disturbo}
+univoco e riconoscibile, ciò permette di identificare il sensore a partire dalle
+immagini, sfruttando lo stesso principio della balistica nel riconoscimento dei segni lasciati dai proiettili nelle armi.
+
+Il disturbo generato nelle immagini è legato sia al sensore che ai dettagli costruttivi. Questo
+assicura una differenza tra singoli dispositivi sufficiente a rendere improbabile
+la presenza di due camere che generino il medesimo disturbo, proprio come avviene per le impronte digitali. 
+
+Rumori di questo genere sono di tipo \emph{pattern noise}. Quest'ultimo è composto da due parti: il \emph{Fixed Pattern Noise} (FPN) ed il rumore \emph{Photo-Response Non-Uniformity} (PRNU).
+
+FPN è un rumore casuale e può essere automaticamente rimosso sottraendo all'immagine originale un'immagine scura. Anche il PRNU può essere scomposto nel rumore \emph{Pixel Non-Uniformity} (PNU) e componenti a bassa frequenza, dove il PNU è il risultato della differenza di luminosità dei pixel a causa delle regioni non omogene del sensore e delle imperfezioni nella costruzione dello stesso.
+
+Due immagini acquisite dallo stesso sensore CCD generalmente presentano lo stesso rumore PNU; inoltre il PNU non è soggetto a variazioni di temperatura o umidità il che lo rende adatto allo scopo dell'identificazione della sorgente.
+
+Il rumore residuo di un'immagine $W$ può essere espresso come
+$$
+W = I - F(I) = IK - \Xi
+$$
+dove $F()$ è una funzione di \emph{denoising}, $K$ è una costante e $\Xi$ è un insieme di fattori di rumore.
+
+A questo punto è necessario stimare $K$ a partire da un insieme $N$ di immagini ottenute dalla medesima camera, assumendo che $\Xi$ sia di tipo gaussiano. Per ciascun $k = 1, \ldots, N$:
+$$
+\frac{W_k}{I_k} = K + \frac{\Xi_k}{I_k}
+$$
+La \emph{log-likelihood} di $\frac{W_k}{I_k}$, dato $K$, è calcolata con
+$$
+L(K) = -\frac{N}{2} \sum_{k = 1}^{N} log(\frac{2\pi\sigma^2}{I_{k}^{2}}) -  \sum_{k = 1}^{N} \frac{(W_k / I_k - K)^2}{2\sigma^2 / I_{k}^{2}}
+$$
+Si risolve l'equazione $\frac{\delta L(K)}{\delta K} = 0$ per ottenere la stima $\hat{K}$ di $K$:
+$$
+\hat{K} = \frac{\sum_{k = 1}^{N} W_k I_k}{\sum_{k = 1}^{N} I_{k}^{2}}
+$$
 
 
 
