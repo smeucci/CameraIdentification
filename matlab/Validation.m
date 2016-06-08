@@ -29,13 +29,16 @@ function [confusionMatrix] = Validation(imgpath, type, varargin)
     p.KeepUnmatched = true;
     defaultNumFolder = Inf;
     defaultNumImages = Inf;
-
+    defaultOutputPath = '';
+    
+    addOptional(p,'OutputPath', defaultOutputPath);
     addOptional(p,'NumFolders', defaultNumFolder, @(x) isnumeric(x));
     addOptional(p,'NumImages', defaultNumImages, @(x) isnumeric(x));
     
     parse(p, varargin{:});
     numFolders = p.Results.NumFolders;
     numImages = p.Results.NumImages;
+    outputPath = p.Results.OutputPath;
 
     fprintf('Validation script for camera identification\n');
 
@@ -48,7 +51,7 @@ function [confusionMatrix] = Validation(imgpath, type, varargin)
     counter = 0;
     predictedLabels = cell(length(n_images), 1);
       for i = 1:n_images
-          [cam, ~] = CameraValidation(images(i).filename);
+          [cam, ~] = CameraValidation(images(i).filename, outputPath);
           predictedLabels{i} = cam;
           counter = counter + 1;
           fprintf('Image processed: %d / %.2f %%', counter, ...

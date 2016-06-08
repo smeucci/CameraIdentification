@@ -1,4 +1,4 @@
-function [camera, affinity] = CameraValidation(image)
+function [camera, affinity] = CameraValidation(image, outputPath)
 %CAMERAVALIDATION Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -9,7 +9,7 @@ function [camera, affinity] = CameraValidation(image)
     
     fprintf('  - Image %s\n', image);
 
-    camera_folder = dir('mat/cameras/');
+    camera_folder = dir(['mat/' outputPath 'cameras/']);
     n_cameras = length(camera_folder) - 2;
 
     pce = zeros(length(n_cameras), 1);
@@ -23,7 +23,7 @@ function [camera, affinity] = CameraValidation(image)
     PRNU = WienerInDFT(PRNU, std2(PRNU));
     
     for i = 1:n_cameras
-       load(['mat/cameras/camera_' num2str(i) '.mat'], 'camera'); 
+       load(['mat/' outputPath 'cameras/camera_' num2str(i) '.mat'], 'camera'); 
        height = size(camera.fingerprint, 1);
        width = size(camera.fingerprint, 2);
        

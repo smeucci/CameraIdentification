@@ -29,11 +29,13 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     defaultNumFolder = Inf;
     defaultNumImages = Inf;
     defaultRandom = false;
+    defaultOutputPath = '';
 
     addOptional(p,'NumFolders', defaultNumFolder, @(x) isnumeric(x));
     addOptional(p,'NumImages', defaultNumImages, @(x) isnumeric(x));
     addOptional(p,'ExtractNoise', defaultExtract, @(x) islogical(x));
     addOptional(p,'Random', defaultRandom, @(x) islogical(x));
+    addOptional(p,'OutputPath', defaultOutputPath);
     
     parse(p, varargin{:});
     extract_noise = p.Results.ExtractNoise;
@@ -41,6 +43,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     numImages = p.Results.NumImages;
     random = p.Results.Random;
     cluster_info_validation = true;
+    outputPath = p.Results.OutputPath;
     
     fprintf('Camera Identification\n');
     fprintf('  -Dataset path: %s\n', imgpath); 
@@ -49,6 +52,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     fprintf('  -Number of images per folder: %d\n', numImages);
     fprintf('  -Extract noise: %d\n', extract_noise);
     fprintf('  -Random images selection: %d\n', random);
+    fprintf('  -Output path: /mat/%s\n', outputPath);
 
     addpath('utils');
     addpath('Functions');
@@ -76,14 +80,18 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     
     width = Inf;
     height = Inf;
-    minWidthThreshold = 2048;
-    minHeightThreshold = 1000;
+    minWidthThreshold = 800;
+    minHeightThreshold = 600;
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %           Noise extraction                %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    if extract_noise || ~(exist(['mat/' mat_images_weights], 'file') == 2)
+    if ~isempty(outputPath) && ~exist(['mat/' outputPath], 'dir')
+        mkdir(['mat/' outputPath]);
+    end
+    
+    if extract_noise
         % Iterative noise extraction %
         %Processed images counter
         fprintf('Image processed: 0 / 0.00 %% - Elapsed time: 0.0 s\n');
@@ -104,7 +112,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
                 width = size(PRNU, 2);
             end
                 
-            save(['mat/image_prnu_' num2str(i) '.prnu'], 'PRNU');
+            save(['mat/' outputPath 'image_prnu_' num2str(i) '.prnu'], 'PRNU');
             clear PRNU;
 
             counter = counter + 1;
@@ -119,11 +127,11 @@ function [output] = CameraIdentification(imgpath, type, varargin)
         fprintf('\nResizing noises to %d x %d\n\n', width, height);
         counter = 0;
         for i = 1:n_images
-            load(['mat/image_prnu_' num2str(i) '.prnu'], '-mat');
+            load(['mat/' outputPath 'image_prnu_' num2str(i) '.prnu'], '-mat');
             if(size(PRNU, 1) ~= height || size(PRNU, 2) ~= width)
                 PRNU = imresize(PRNU, [height width]);
             end
-            save(['mat/image_prnu_' num2str(i) '.prnu'], 'PRNU');
+            save(['mat/' outputPath 'image_prnu_' num2str(i) '.prnu'], 'PRNU');
             clear PRNU;
             counter = counter + 1;
             fprintf('Resized %d / %d images \n', counter, n_images);
@@ -134,7 +142,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     %           Evaluating weights              %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    if extract_noise || ~(exist(['mat/' mat_images_weights], 'file') == 2)
+    if extract_noise || ~(exist(['mat/' outputPath mat_images_weights], 'file') == 2)
         %Evaluating weights with PCE distance bewtee noises
         fprintf('\nEvaluating pairwise affinities between noises\n\n');
         start_time = clock;
@@ -143,11 +151,11 @@ function [output] = CameraIdentification(imgpath, type, varargin)
         counter = 0;
         total_weights = (n_images^2 - n_images)/2 + n_images;
         for i = 1:n_images
-            load(['mat/image_prnu_' num2str(i) '.prnu'], '-mat');
+            load(['mat/' outputPath 'image_prnu_' num2str(i) '.prnu'], '-mat');
             noisex = PRNU;
             clear PRNU;
             for j = i:n_images     
-                load(['mat/image_prnu_' num2str(j) '.prnu'], '-mat');
+                load(['mat/' outputPath 'image_prnu_' num2str(j) '.prnu'], '-mat');
                 noisey = PRNU;
                 clear PRNU;
                 weights(i, j) = PCEdistance(noisex, noisey);
@@ -157,13 +165,13 @@ function [output] = CameraIdentification(imgpath, type, varargin)
                        (counter * 100/total_weights));
             end
         end
-        save(['mat/' mat_images_weights], 'weights');
+        save(['mat/' outputPath mat_images_weights], 'weights');
         fprintf('Building weights matrix total time: %.2f s\n', etime(clock, start_time));
     else
-        load(['mat/' mat_images_weights], 'weights');
+        load(['mat/' outputPath mat_images_weights], 'weights');
         fprintf('Weights matrix loaded from file.\n');
     end
-     
+
     images = cell2mat(images);
     
     %Starts normalized cuts algorithm
@@ -191,8 +199,8 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     fprintf('\nClustering done. Found %d clusters.\n', n_clusters);
     fprintf('Evaluating camera fingerprints.\n');
     
-    if ~exist('mat/cameras', 'dir')
-        mkdir('mat/cameras');
+    if ~exist(['mat/' outputPath 'cameras'], 'dir')
+        mkdir(['mat/' outputPath 'cameras']);
     end
 
     for k = 1:n_clusters
@@ -200,7 +208,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
         start_time = clock;
         idx = cellfun(@(x) isequal(x, k), {images.camera});
         camera = evaluateClusterFingerprint(images(idx), cluster_info_validation);
-        save(['mat/cameras/camera_' num2str(k) '.mat'], 'camera');
+        save(['mat/' outputPath 'cameras/camera_' num2str(k) '.mat'], 'camera');
         fprintf('Fingerprint extracted in: %.2f s\n', etime(clock, start_time));
     end    
     
