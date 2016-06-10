@@ -1,9 +1,10 @@
-function [precision, recall, accuracy] = validateClusterResults(images, clusters)
+function [precision, recall, accuracy, fpr] = validateClusterResults(images, clusters)
 %Evaluate clustering results
 
     precisions = zeros(length(clusters), 1);
     recalls = zeros(length(clusters), 1);
     accuracies = zeros(length(clusters), 1);
+    fprs = zeros(length(clusters), 1);
     
     total_labels = unique({images.folder});
     for l = 1:length(total_labels)
@@ -31,6 +32,7 @@ function [precision, recall, accuracy] = validateClusterResults(images, clusters
         precisions(l) = tp / (tp + fp);
         recalls(l) = tp / (tp + fn);
         accuracies(l) = (tp + tn) / (tp + tn + fp + fn);
+        fprs(l) = fp / (tp + fp);
         
     end
 
@@ -38,5 +40,6 @@ function [precision, recall, accuracy] = validateClusterResults(images, clusters
     precision = mean(precisions);
     recall = mean(recalls);
     accuracy = mean(accuracies);
+    fpr = mean(fprs);
 end
 
