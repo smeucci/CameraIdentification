@@ -32,17 +32,22 @@ function [threshold, precision] = crossvalidateThreshold(imgpath, numFolders, nu
     accuracies = zeros(length(range), 1);
     precisions = zeros(length(range), 1);
     recalls = zeros(length(range), 1);
+    fprs = zeros(length(range), 1);
+    tprs = zeros(length(range), 1);
     
     for i = 1:length(range)
         th = range(i);
         fprintf('Setting threshold to: %f - ', th);
         clusters = normalizedCuts(weights, 'Type', type, 'Threshold', th, 'Verbose', false);
-        [P, R, A] = validateClusterResults(images, clusters);
-        fprintf('Precision: %f, Recall: %f, Accuracy: %f\n', P, R, A);
+        [P, R, A, TPR, FPR] = validateClusterResults(images, clusters);
+        fprintf('Precision: %f, Recall: %f, Accuracy: %f, TPR: %f, FPR: %f\n', P, R, A, FPR, TPR);
         thresholds(i) = th;
         accuracies(i) = A;
         precisions(i) = P;
         recalls(i) = R;
+        fprs(i) = FPR;
+        tprs(i) =  TPR;
+        
         if P > precision
            precision = P;
            threshold = th;
@@ -50,10 +55,21 @@ function [threshold, precision] = crossvalidateThreshold(imgpath, numFolders, nu
         end
     end
     
-    save(['mat/threshold_crossvalidation' type '.mat'], 'thresholds', 'accuracies', 'precisions', 'recalls');
+    save(['mat/threshold_crossvalidation' type '.mat'], 'thresholds', ...
+            'accuracies', 'precisions', 'recalls', 'fprs', 'tprs');
+    
+    title('Precisions');
     plot(thresholds, precisions);
+    
+    figure;title('Accuracies');
     plot(thresholds, accuracies);
+    figure;title('Recalls');
     plot(thresholds, recalls);
 
+    [FA, I] = sort(fprs);
+    TP = tprs(I);
+    figure;title('ROC fpr over tpr');
+    plot(FA, TP);
+ 
 end
 
