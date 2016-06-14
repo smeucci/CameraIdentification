@@ -30,12 +30,14 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     defaultNumImages = Inf;
     defaultRandom = false;
     defaultOutputPath = '';
+    defaultOffset = 0;
 
     addOptional(p,'NumFolders', defaultNumFolder, @(x) isnumeric(x));
     addOptional(p,'NumImages', defaultNumImages, @(x) isnumeric(x));
     addOptional(p,'ExtractNoise', defaultExtract, @(x) islogical(x));
     addOptional(p,'Random', defaultRandom, @(x) islogical(x));
     addOptional(p,'OutputPath', defaultOutputPath);
+    addOptional(p, 'Offset', defaultOffset, @(x) isnumeric(x));
     
     parse(p, varargin{:});
     extract_noise = p.Results.ExtractNoise;
@@ -44,6 +46,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     random = p.Results.Random;
     cluster_info_validation = true;
     outputPath = p.Results.OutputPath;
+    offset = p.Results.Offset;
     
     fprintf('Camera Identification\n');
     fprintf('  -Dataset path: %s\n', imgpath); 
@@ -64,7 +67,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     mat_images_weights = 'images_weights.mat';
     
     %Read image path looking for images
-    filenames = getImagesPath(imgpath, type, 'NumFolders', numFolders, 'NumImages', numImages, 'Random', random); 
+    filenames = getImagesPath(imgpath, type, 'NumFolders', numFolders, 'NumImages', numImages, 'Random', random, 'Offset', offset); 
         
     n_images = length(filenames);
         
@@ -177,6 +180,12 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     %Starts normalized cuts algorithm
     %To be implemented
     clusters = normalizedCuts(weights);
+    
+    [tpr, fpr] = validateClusterResults(images, clusters);
+    fprintf('\nEvaluate clusters:\n');
+    fprintf('TPR: %.2f\n', tpr);
+    fprintf('FPR: %.2f\n', fpr);
+    save(['mat/' outputPath 'cluster_fpr_tpr.mat'], 'tpr', 'fpr');
     clear weights;
     
     %Store table of the results of clustering operations
