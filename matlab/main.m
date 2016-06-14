@@ -9,20 +9,46 @@ addpath('Filter');
 addpath('rwt-master/bin');
 addpath('ncuts');
 
-imgpath = '../dataset/images/';
-type = 'imgs_nat';
-numImages = 50;
-numFolders = 12;
-random = false;
-outputPath = 'crossvalidation_imgs_nat_fb_highres/';
-
 fprintf('CameraIdentification main script\n\n');
 
+imgpath = '../dataset/images/';
+
+numImages = 50;
+random = false;
 warning off;
-%try
+
+%imgs nat%
+type = 'imgs_nat';
+
+try
+    CameraIdentification(imgpath, type, 'NumFolders', 4, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_4/', 'Offset', 4);
+    
+    CameraIdentification(imgpath, type, 'NumFolders', 5, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_5/', 'Offset', 7);
+    
+    CameraIdentification(imgpath, type, 'NumFolders', 6, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_6/', 'Offset', 0);
+
+    %facebook% 
+    type = 'imgs_nat_fb_highres';
+
+    CameraIdentification(imgpath, type, 'NumFolders', 4, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_fb_highres_4/', 'Offset', 4);
+    
+    CameraIdentification(imgpath, type, 'NumFolders', 5, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_fb_highres_5/', 'Offset', 7);
+    
+    CameraIdentification(imgpath, type, 'NumFolders', 6, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_fb_highres_6/', 'Offset', 0);
+catch
+   disp('errore'); 
+end
+exit;
+
+%
 %load('mat/imgs_nat_fb_highres/images_weights.mat', 'weights');
-%weights = weights(1:5*50, 1:5*50);
-[tprs, fprs, thresholds] = crossvalidateThreshold(imgpath, type, 6, 30, w, 0:10^-3:0.05, 'AC', outputPath);
+%[tprs, fprs, thresholds] = crossvalidateThreshold(imgpath, type, 12, 30, w, -10^-4:10^-5:10^-3, 'NC', outputPath, 0);
 
 %    CameraIdentification(imgpath, type, 'NumFolders', numFolders, 'NumImages', ...
 %        numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', outputPath);
