@@ -1,4 +1,4 @@
-function [tprs, fprs, thresholds] = crossvalidateThreshold(imgpath, imgtype, numFolders, numImages, weights, range, type, outputPath)
+function [tprs, fprs, thresholds] = crossvalidateThreshold(imgpath, imgtype, numFolders, numImages, weights, range, type, outputPath, offset)
 % Find optimal threshold for normalized cuts algorithm
 %
 %   INPUTS
@@ -11,7 +11,7 @@ function [tprs, fprs, thresholds] = crossvalidateThreshold(imgpath, imgtype, num
 % Authors: Lorenzo Cioni, Saverio Meucci
 % ----------------------------------------------------
 
-    filenames = getImagesPath(imgpath, imgtype, 'NumFolders', numFolders, 'NumImages', numImages); 
+    filenames = getImagesPath(imgpath, imgtype, 'NumFolders', numFolders, 'NumImages', numImages, 'Offset', offset); 
     n_images = length(filenames);    
     images = cell(n_images, 1);
     

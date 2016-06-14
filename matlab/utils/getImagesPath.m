@@ -21,15 +21,18 @@ function [images] = getImagesPath(dataset_path, type, varargin)
     defaultNumFolder = Inf;
     defaultNumImages = Inf;
     defaultRandom = false;
+    defaultOffset = 0;
 
     addOptional(p, 'NumFolders', defaultNumFolder, @(x) isnumeric(x));
     addOptional(p, 'NumImages', defaultNumImages, @(x) isnumeric(x));
     addOptional(p, 'Random', defaultRandom, @(x) islogical(x));
+    addOptional(p, 'Offset', defaultOffset, @(x) isnumeric(x));
     
     parse(p, varargin{:});
     numFolders = p.Results.NumFolders;
     numImages = p.Results.NumImages;
     random = p.Results.Random;
+    offset = p.Results.Offset;
     
     folders = dir(dataset_path);
 
@@ -43,7 +46,7 @@ function [images] = getImagesPath(dataset_path, type, varargin)
     
     numFolders = min(size(folders, 1), numFolders);
     folderCounter = 0;
-    i = uint8(1);
+    i = uint8(1) + 2 + offset;
     while i <= size(folders, 1) && folderCounter < numFolders
         
         folder = folders(i);
