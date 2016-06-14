@@ -1,9 +1,6 @@
-function [precision, recall, accuracy, fpr, tpr] = validateClusterResults(images, clusters)
+function [tpr, fpr] = validateClusterResults(images, clusters)
 %Evaluate clustering results
 
-    precisions = zeros(length(clusters), 1);
-    recalls = zeros(length(clusters), 1);
-    accuracies = zeros(length(clusters), 1);
     tprs = zeros(length(clusters), 1);
     fprs = zeros(length(clusters), 1);    
     
@@ -26,21 +23,13 @@ function [precision, recall, accuracy, fpr, tpr] = validateClusterResults(images
         tn = length(images) - tp - fn;
 
         %Storing measures
-        precisions(i) = tp / (tp + fp);
-        recalls(i) = tp / (tp + fn);
-        accuracies(i) = (tp + tn) / (tp + tn + fp + fn);
-        
-        tprs(i) = tp;
-        fprs(i) = fp;
+        tprs(i) = tp / (tp + fn);
+        fprs(i) = fp / (fp + tn);
         
     end
     
-    %Means of precisions, recalls and accuracies of each cluster
-    precision = mean(precisions);
-    recall = mean(recalls);
-    accuracy = mean(accuracies);
-    
-    tpr = sum(tprs) / length(images);
-    fpr = sum(fprs) / length(images);
+    %TPR and FPR average
+    tpr = sum(tprs) / length(total_labels);
+    fpr = sum(fprs) / length(total_labels);
 end
 
