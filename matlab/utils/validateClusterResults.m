@@ -29,7 +29,7 @@ function [tpr, fpr] = validateClusterResults(images, clusters)
     end
     
     %TPR and FPR average
-    tpr = sum(tprs) / length(total_labels);
-    fpr = sum(fprs) / length(total_labels);
+    tpr = sum(tprs) / length(clusters);
+    fpr = sum(fprs) / length(clusters);
 end
 
