@@ -14,14 +14,15 @@ type = 'imgs_nat';
 numImages = 50;
 numFolders = 12;
 random = false;
-outputPath = 'crossvalidation_imgs_nat/';
+outputPath = 'crossvalidation_imgs_nat_fb_highres/';
 
 fprintf('CameraIdentification main script\n\n');
 
+warning off;
 %try
 %load('mat/imgs_nat_fb_highres/images_weights.mat', 'weights');
-weights = weights(1:5*50, 1:5*50);
-[tprs, fprs, thresholds] = crossvalidateThreshold(imgpath, type, 6, 30, w, 0:10^-5:10^-2, 'NC', outputPath);
+%weights = weights(1:5*50, 1:5*50);
+[tprs, fprs, thresholds] = crossvalidateThreshold(imgpath, type, 6, 30, w, 0:10^-3:0.05, 'AC', outputPath);
 
 %    CameraIdentification(imgpath, type, 'NumFolders', numFolders, 'NumImages', ...
 %        numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', outputPath);

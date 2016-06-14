@@ -38,14 +38,6 @@ function [tprs, fprs, thresholds] = crossvalidateThreshold(imgpath, imgtype, num
         fprs(i) = FPR;
         tprs(i) = TPR;
     end   
-
-    [fprs, I] = sort(fprs);
-    tprs = tprs(I);
-    figure;
-    plot(fprs, tprs);
-    title('ROC fpr over tpr');
-    
-    thresholds = thresholds(I);
         
     if ~isempty(outputPath) && ~exist(['mat/' outputPath], 'dir')
         mkdir(['mat/' outputPath]);

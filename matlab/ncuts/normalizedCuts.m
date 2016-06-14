@@ -46,6 +46,10 @@ function segments = normalizedCuts(weights, varargin)
         if verbose
             fprintf('\n- Normalized Cuts using aggregation coefficients\n\n');
         end
+        
+        max_value = max(max(weights));
+        min_value = min(min(weights));
+        weights = remap(weights, [min_value, max_value], [0, 1]);
         segments = NcutPartitionAggregationCoefficient(I, weights, id, threshold, verbose);
     else
         if verbose

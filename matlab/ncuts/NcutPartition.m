@@ -33,7 +33,7 @@ function [segments] = NcutPartition(I, weights, id, th_ncut, verbose)
     if ncut > th_ncut
         segments{1} = I;
         return;
-    end    
+    end
     
     %Recursion
     segments_A = NcutPartition(I(A), weights(A, A), [id, '-A'], th_ncut, verbose);

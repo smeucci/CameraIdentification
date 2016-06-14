@@ -54,6 +54,7 @@ function [images] = getImagesPath(dataset_path, type, varargin)
            imgs = dir(camera_path);
            
            idk = 1;
+           to_del = [];
            for k = 1:size(imgs, 1);
               if (strcmp(imgs(k).name(1), '.') || strcmp(imgs(k).name, '..') || imgs(k).isdir)
                  to_del(idk) = k;
