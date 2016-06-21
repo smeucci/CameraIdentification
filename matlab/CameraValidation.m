@@ -7,7 +7,7 @@ function [camera, affinity] = CameraValidation(image, outputPath)
     addpath('Filter');
     addpath('rwt-master/bin');
     
-    fprintf('  - Image %s\n', image);
+    fprintf('  -Image %s\n', image);
 
     camera_folder = dir(['mat/' outputPath 'cameras/']);
     n_cameras = length(camera_folder) - 2;
@@ -51,5 +51,6 @@ function [camera, affinity] = CameraValidation(image, outputPath)
     [affinity, index] = max(pce);
     camera = cameras(index).folder;
     
+    fprintf('  -Choosen cluster: %s\n', camera);
 end
 
