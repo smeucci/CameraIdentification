@@ -35,8 +35,8 @@ $$
 \hat{K} = \frac{\sum_{k = 1}^{N} W_k I_k}{\sum_{k = 1}^{N} I_{k}^{2}}
 $$
 
+Maggiore sarà il numero $N$ di immagini considerate per la stima della quantità $\hat{K}$, maggiore sarà la bontà della stessa.
 
+Per come è definito è necessario che tutte le immagini considerate abbiano la stessa dimensione. Per procedere dunque sarà necessario procedere con un eventuale ridimensionamento delle immagini. Nella nostra implementazione le immagini vengono riportate tutte ad essere della stessa dimensione dell'immagine più piccola. Questa scelta è dettata dalla complessità computazione dell'algoritmo di estrazione del rumore direttamente proporzionale alla dimensione delle immagini considerate.
 
-cosa è il prnu in generale (non nel dettaglio) e come si calcola la pce tra due prnu
-
-dettagli della estrazione: resize immagini (alla dimensione inferiore), rotazione immagini in landscape mode
+Tutte le immagini sono infine state ruotate come se fossero state scattate in \emph{landscape mode}.
