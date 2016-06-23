@@ -1,6 +1,11 @@
 function [confusionMatrix, classes] = plotConfusionMatrix(trueLabels, predictedLabels, plot, name)
 %Generate confusion matrix and plot the result
 
+    for i = 1:length(trueLabels)
+        trueLabels(i) = strrep(trueLabels(i), '_', ' ');
+        predictedLabels(i) = strrep(predictedLabels(i), '_', ' ');
+    end
+
     [confusionMatrix, classes] = confusionmat(trueLabels, predictedLabels);
     confusionMat = confusionMatrix ./ repmat(sum(confusionMatrix, 2), 1, size(confusionMatrix, 2));
     %Percentage
