@@ -24,3 +24,7 @@ docs/*.synctex.gz
 articles/04451084.pdf
 
 articles/10.1.1.353.1482.pdf
+
+docs/article.bbl
+
+docs/article.blg
