@@ -10,10 +10,16 @@ Una volta costruito il grafo pesato possiamo procedere con la fase di clusterizz
 \subsection{Normalized Cuts}
 
 Dato una grafo $ G = <V, E> $, gli archi $E$ che connettono ciascuna coppia di nodi, ovvero di PNRU, sono pesati con la PCE, come descritto in precedenza, dove $PCE(i, j)$ rappresenta la similarità fra il nodo $i$ e il nodo $j$.
-L'algoritmo di clusterizzazione Normalized Cuts è un algoritmo ricorsivo, che ad ogni iterazione, bipartiziona il grafo G, creando quindi due sottografi A e B ($A\cup B = V$ e $A\cap B = \emptyset$). Una volta ottenuti due sottografi è possibile dare un valore del taglio, ovvero calcolare il peso totale  degli archi rimossi che fornisce una stima sul grado di dissimilarità di questi due sottografi. Il taglio è calcolato come segue: $$ cut(A,B) = \sum_{u\in A, v\in B} w(u, v) $$
+L'algoritmo di clusterizzazione Normalized Cuts è un algoritmo ricorsivo, che ad ogni iterazione, bipartiziona il grafo G, creando quindi due sottografi A e B ($A\cup B = V$ e $A\cap B = \emptyset$). Una volta ottenuti due sottografi è possibile dare un valore del taglio, ovvero calcolare il peso totale  degli archi rimossi che fornisce una stima sul grado di dissimilarità di questi due sottografi. Il taglio è calcolato come segue: 
+
+\begin{equation}
+cut(A,B) = \sum_{u\in A, v\in B} w(u, v)
+\end{equation}
 
 Il taglio ottimale per bipartizionare il grafo è calcolato ottimizzando il valore di un taglio normalizzato, ideato dagli autori originali dell'algoritmo per evitare che si favorisca la creazione di piccoli cluster composti da nodi isolati. Il taglio normalizzato, da cui l'algoritmo Normalized Cuts prende il nome, è calcolato come segue: 
-$$ Ncut(A,B) =  \frac{cut(A,B)}{assoc(A,V)} + \frac{cut(A,B)}{assoc(B,V)} $$
+\begin{equation}
+Ncut(A,B) =  \frac{cut(A,B)}{assoc(A,V)} + \frac{cut(A,B)}{assoc(B,V)}
+\end{equation}
 dove $assoc(A,V) = \sum_{u\in A, t\in V} w(u,t) $ rappresenta la somma dei pesi degli archi che connettono i nodi della partizione A ad un generico nodo del grafo G.
 Va notato che la misura di $cut(A,B)$ è sempre minore di $assoc(A,V)$ e di $assoc(B,V)$. Gli archi che sono rimossi sono una frazione degli archi che hanno un nodo in A e l'altro nodo in B. Il valore $assoc(A,V) - cut(A,B)$ misura la somma dei pesi degli archi che collegano due nodi in A. Quindi, il valore di $ \frac{cut(A,B)}{assoc(A,V)}$ è basso quando i nodi in A hanno un grado di similarità fra di loro e un basso grado di similarità con in nodi che non appartengono ad A. Il taglio normalizzato ha quindi la proprietà di partizionare il grafo in due segmenti A e B tale che la somma dei pesi degli archi che connettono le due partizioni è bassa.
 
@@ -24,15 +30,20 @@ Per calcolare il taglio normalizzato ottimale, occorre:
 \item una degree matrix $D = \lbrace d_{ii} \rbrace $, una matrice diagonale, in cui ogni elemento che è sulla diagonale è la somma di tutti i pesi degli archi che partono dall'i-esimo nodo, ovvero $d_{ii} = \sum_{j} a_{ij}$
 \end{itemize}
 
-Può essere dimostrato che il taglio che minimizza il costo normalizzato, minimizza anche la seguente funzione: $$ \frac{\gamma^{T}(D-A)\gamma}{\gamma^{T}D\gamma}$$
-La soluzione $\gamma$, che rappresenta il taglio, dovrebbe essere un vettore di valori discreti in $\lbrace 0,1 \rbrace$. Tale funzionale è una versione discreta del quoziente di Rayleigh. Risolvere tale funzionale per valori discreti è un problema NP-completo. Tuttavia, il problema diventa trattabile se la soluzione $\gamma$ è libera di assumere valori reali. A questo punto, minimizzare il costo di una funzione per un vettore $\gamma$ di valori reali è equivalente alla soluzione della seguente equazione: $$ (D-A) \gamma = \lambda D \gamma $$
+Può essere dimostrato che il taglio che minimizza il costo normalizzato, minimizza anche la seguente funzione: \begin{equation}
+\frac{\gamma^{T}(D-A)\gamma}{\gamma^{T}D\gamma}
+\end{equation}
+La soluzione $\gamma$, che rappresenta il taglio, dovrebbe essere un vettore di valori discreti in $\lbrace 0,1 \rbrace$. Tale funzionale è una versione discreta del quoziente di Rayleigh. Risolvere tale funzionale per valori discreti è un problema NP-completo. Tuttavia, il problema diventa trattabile se la soluzione $\gamma$ è libera di assumere valori reali. A questo punto, minimizzare il costo di una funzione per un vettore $\gamma$ di valori reali è equivalente alla soluzione della seguente equazione: 
+\begin{equation}
+(D-A) \gamma = \lambda D \gamma
+\end{equation}
 Poichè il più piccolo autovalore di $(D-A)$ è pari a zero, può essere dimostrato che la soluzione all'equazione è l'autovettore corrispondente al secondo più piccolo autovalore.
 Una volta ottenuta la soluzione reale è necessario discretizzarla nei valori $\lbrace 0,1 \rbrace$. Occore quindi scegliere un valore di soglia. Per fare ciò si può utilizzare il valore 0 o il valore mediano fra gli elementi della soluzione come valore di soglia oppure si può scegliere il valore, fra gli elementi della soluzione, che minimizza il valore di $Ncut(A,B)$.
 
 La procedura di bipartizione del grafo può essere riassunta come segue:
 \begin{enumerate}
 \item Dato un insieme di features, costruire un grafo pesato $G = <V,E>$, calcolando i pesi di ciascun arco che rappresentano una similarità fra i nodi.
-\item Risolvere l'equazione mostrata precedentemente Eq.(num) utilizzando l'autovettore corrispondente al secondo più piccolo autovalore.
+\item Risolvere l'equazione mostrata precedentemente Eq.(8) utilizzando l'autovettore corrispondente al secondo più piccolo autovalore.
 \item Usare tale soluzione per bipartizionare il grafo, in modo tale che il costo del taglio normalizzato sia minimo.
 \item Decidere se le due partizione correnti devono essere suddivise ricorsivamente andando a calcolare una misura della stabilità del taglio.
 \end{enumerate}
