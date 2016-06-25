@@ -43,13 +43,41 @@ Nella seguente sottosezione verrà spiegato in maggiore dettaglio lo step 4.
 
 L'algoritmo Normalized Cuts si basa su uno step ricorsivo che dipende dalla verifica di stabilità del taglio appena realizzato. L'implementazione originale dell'algoritmo prevede di comparare il valore di $Ncut(A,B)$ ad una soglia $T_{k}$ decisa a priori. Gli autori di [cit] hanno invece definito un coefficiente di aggregazione, $AC(k) = \frac{1}{N_{k}} \sum_{i,j} w(i,j)$, ovvero il valore medio dei pesi associati ai nodi che appartengono alla partizione $k$, calcolato per ciascuna partizione ottenuta; se tale valore è minore di una soglia $T_{k}$ predefinita la partizione viene ulteriormente suddivisa, se è maggiore l'iterazione si ferma.
 
-Per decidere quali dei due metodi usare nella nostra implementazione e quale soglia $T_{k}$ predefinita utilizzare, è stato usato un approccio basato su curve ROC prendendo come parametri di correttazza della clusterizzazione il valori di TPR e FPR rispetto ad un ground-truth. Per fare ciò abbiamo considerato un sottoinsieme delle immagini appartenenti al dataset utilizzato, in modo da considerare tutte i dispositivi in nostro possesso per la scelta della soglia $T_{k}$.
+Per decidere quali dei due metodi usare nella nostra implementazione e quale soglia $T_{k}$ predefinita utilizzare, è stato usato un approccio basato su curve ROC prendendo come parametri di correttazza della clusterizzazione il valori di TPR e FPR rispetto ad un ground-truth. Per fare ciò abbiamo considerato un sottoinsieme di 20 immagini da ciascun dispositivo del dataset utilizzato, in modo da considerare tutte i dispositivi in nostro possesso per la scelta della soglia $T_{k}$.
 
 Il range di variazione della soglia $T_{k}$ differisce a seconda del metodo utilizzato, ovvero il valore di $Ncut$ o il coefficiente di aggregazione. I grafici mostrati in seguito rappresentano l'andamento dei valori di TPR e FPR al variare della soglia. Tali esperimenti sono stati fatti sia per le immagini direttamente acquisite dai dispositivi, sia per le immagini caricate e riscaricate da facebook, con l'opzione per il download ad alta risoluzione.
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/soglia_imgnat_AC.png}
+\end{center}
+  \caption{Valori di TPR e FPR al variare della soglia per le immagini naturali acquisite direttamente dai dispositivi. Metodo con coefficiente di aggregazione.}
+\label{fig:soglia AC}
+\end{figure}
 
-(mettere grafici)
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/soglia_imgnat_NC.png}
+\end{center}
+  \caption{Valori di TPR e FPR al variare della soglia per le immagini naturali acquisite direttamente dai dispositivi. Metodo che considera i valori di $Ncuts$.}
+\label{fig:soglia AC}
+\end{figure}
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/soglia_imgnat_fb_AC.png}
+\end{center}
+  \caption{Valori di TPR e FPR al variare della soglia per le immagini scaricate da Facebook. Metodo con coefficiente di aggregazione.}
+\label{fig:soglia AC}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/soglia_imgnat_fb_NC.png}
+\end{center}
+  \caption{Valori di TPR e FPR al variare della soglia per le immagini scaricate da Facebook. Metodo che considera i valori di $Ncuts$.}
+\label{fig:soglia AC}
+\end{figure}
 
 Nella nostra implementazione, come si può notare dai risultati, il metodo che utilizza $Ncut$ risulta essere il migliore quando vengono usate le immagini direttamente acquisite dai dispositivi. Per questo caso è stata selezionata come migliore soglia $T_{k} = 10^{-5}$ che corrisponde al valore massimo di TPR, pari a 0.75, e al valore minimo di FPR, pari a 0; ciò significa che le immagini non sono perfettamente raggruppate, ovvero il numero di clusters è maggiore di quello atteso, ma al contempo i clusters ottenuti sono "puliti" ovvero sono composti solo da elementi simili, non contengono,cioè, falsi positivi.
 Per il caso delle immagini provenienti da Facebook, il confronto fra i due metodi è più incerto. Ciò è probabilmente dovuto al fatto che, subendo una compressione, la PNRU di tali immagini perde informazione in grado di discriminarle a sufficienza. Infatti i risultati ottenuti mostrano un numero significativo di falsi positivi contenuti nei clusters in entrambi i metodi, una situazione non desiderabile poichè è a partire da tali clusters che verranno calcolate le fingerprint relative ai dispositivi. Inoltre i minimi valori di FPR si ottengono in corrispondenza dei minimi valori di TPR; ciò indica che i clusters ottenuti sono perlopiù cluster singoli o con pochi elementi, altro caso non desiderabile. Tuttavia, per coerenza con il caso precendete, è stata scelto di utilizzare il metodo relativo a $Ncuts$, poichè mostra più consistenza con il valore ottimale della soglia $T_{k}$, che è sempre pari a $10^{-5}$ e che corrisponde al valore minimo di FPR.
