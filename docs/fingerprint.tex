@@ -2,7 +2,7 @@
 
 Al fine di generare il \emph{reference pattern}, il rumore caratteristico di una sorgente, è necessario disporre di una serie di immagini provenienti dalla stessa camera; per ottenere buoni risultati è consigliato utilizzare dalle 20 alle 50 immagini.
 
-Le immagini utilizzate sono dunque processate per la rimozione del rumore, \emph{denoising}. Per questa operazione è possibile utilizzare una qualsiasi tecnica presente in letteratura. Nell'implementazione utilizzata viene usato il filtro di \emph{Daubechies}\cite{Daubechies:1992:TLW:130655}, filtri a fase minima generano \emph{wavelets} che hanno supporto minimo. 
+Le immagini utilizzate sono dunque processate per la rimozione del rumore, \emph{denoising}. Per questa operazione è possibile utilizzare una qualsiasi tecnica presente in letteratura. Nell'implementazione utilizzata viene usato il filtro di \emph{Daubechies}\cite{Daubechies:1992:TLW:130655}, un filtro a fase minima che genera \emph{wavelets} che hanno supporto minimo. 
 
 Il PRNU stimato è trovato tramite la media dei residui di rumore delle immagini. 
 

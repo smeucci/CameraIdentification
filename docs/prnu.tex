@@ -3,7 +3,7 @@
 Durante tutto il processo di acquisizione ed elaborazione, l'immagine può essere affetta da rumore. 
 In particolare, ogni fotocamera digitale possiede un sensore
 lievemente differente dalle altre dello stesso modello, per via di un \emph{disturbo}
-univoco e riconoscibile, ciò permette di identificare il sensore a partire dalle
+univoco e riconoscibile. Ciò permette di identificare il sensore a partire dalle
 immagini, sfruttando lo stesso principio della balistica nel riconoscimento dei segni lasciati dai proiettili nelle armi.
 
 Il disturbo generato nelle immagini è legato sia al sensore che ai dettagli costruttivi. Questo
@@ -12,9 +12,9 @@ la presenza di due camere che generino il medesimo disturbo, proprio come avvien
 
 Rumori di questo genere sono di tipo \emph{pattern noise}. Quest'ultimo è composto da due parti: il \emph{Fixed Pattern Noise} (FPN) ed il rumore \emph{Photo-Response Non-Uniformity} (PRNU).
 
-FPN è un rumore casuale e può essere automaticamente rimosso sottraendo all'immagine originale un'immagine scura. Anche il PRNU può essere scomposto nel rumore \emph{Pixel Non-Uniformity} (PNU) e componenti a bassa frequenza, dove il PNU è il risultato della differenza di luminosità dei pixel a causa delle regioni non omogene del sensore e delle imperfezioni nella costruzione dello stesso.
+FPN è un rumore casuale e può essere automaticamente rimosso sottraendo all'immagine originale un'immagine scura. Anche il PRNU può essere scomposto nel rumore \emph{Pixel Non-Uniformity} (PNU) e componenti a bassa frequenza, dove il PNU è il risultato della differenza di luminosità dei pixels a causa delle regioni non omogene del sensore e delle imperfezioni nella costruzione dello stesso.
 
-Due immagini acquisite dallo stesso sensore CCD generalmente presentano lo stesso rumore PNU; inoltre il PNU non è soggetto a variazioni di temperatura o umidità il che lo rende adatto allo scopo dell'identificazione della sorgente.
+Due immagini acquisite dallo stesso sensore CCD generalmente presentano lo stesso rumore PNU; inoltre il PNU non è soggetto a variazioni di temperatura o umidità, il che lo rende adatto allo scopo dell'identificazione della sorgente.
 
 Il rumore residuo di un'immagine $W$ può essere espresso come
 $$
@@ -37,6 +37,6 @@ $$
 
 Maggiore sarà il numero $N$ di immagini considerate per la stima della quantità $\hat{K}$, maggiore sarà la bontà della stessa.
 
-Per come è definito è necessario che tutte le immagini considerate abbiano la stessa dimensione. Per procedere dunque sarà necessario procedere con un eventuale ridimensionamento delle immagini. Nella nostra implementazione le immagini vengono riportate tutte ad essere della stessa dimensione dell'immagine più piccola. Questa scelta è dettata dalla complessità computazione dell'algoritmo di estrazione del rumore direttamente proporzionale alla dimensione delle immagini considerate.
+Per come è definito è necessario che tutte le immagini considerate abbiano la stessa dimensione. Per procedere sarà dunque necessario un eventuale ridimensionamento delle immagini. Nella nostra implementazione le immagini vengono riportate tutte ad essere della stessa dimensione dell'immagine più piccola. Questa scelta è dettata dalla complessità computazionale dell'algoritmo di estrazione del rumore direttamente proporzionale alla dimensione delle immagini considerate.
 
 Tutte le immagini sono infine state ruotate come se fossero state scattate in \emph{landscape mode}.

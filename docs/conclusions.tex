@@ -1,16 +1,16 @@
 \section{Conclusioni}
 
-In questo articolo abbiamo presentato un metodo di identificazione automatica di dispositivi a partire da un insieme di immagini la cui provenienza è ignota. Il metodo, prendendo le basi da [cit] e apportandone alcune modifiche, funziona come segue:
+In questo articolo abbiamo presentato un metodo di identificazione automatica di dispositivi a partire da un insieme di immagini la cui provenienza è ignota. Il metodo, prendendo le basi da \cite{ Amerini2014831} e apportandone alcune modifiche, funziona come segue:
 \begin{enumerate}
 \item Le PNRU vengono estratte dalle immagini del dataset. 
-\item Per ogni coppia di PNRU viene calcolata una misura di similarità utilizzando la PCE e viene costruita una matrice dei pesi che rappresenta il grafo completamente connesso.
+\item Per ogni coppia di PRNU viene calcolata una misura di similarità utilizzando la PCE e viene costruita una matrice dei pesi che rappresenta il grafo completamente connesso.
 \item L'algoritmo Normalized Cuts partiziona il grafo e divide le immagini in clusters.
-\item Per ogni clusters viene calcolata una fingerprint che rappresenta un dispositivo, a partire dalle PNRU delle immagini appartenenti a tale cluster.
+\item Per ogni clusters viene calcolata una fingerprint che rappresenta un dispositivo, a partire dalle PRNU delle immagini appartenenti a tale cluster.
 \item Infine una fase di validazione che verifica la qualità delle fingerprint estratte.
 \end{enumerate}
 
 Il dataset utilizzato contiene immagini direttamente acquisite dai dispositivi e le stesse immagini caricate e poi scaricate da Facebook. I risultati ottenuti nella fase di validazione differiscono molto a seconda del tipo di immagini utilizzate. Le fingerprint estratte per il caso delle immagini naturali sono di qualità ed il metodo è in grado di associare una generica immagine del dataset alla fingerprint corretta, ad eccezione per le immagini provenienti dal dispositivo Huawei; a tal proposito sarebbe interessante verificare le performance del metodo utilizzando un dataset di immagini fatto da più modelli Huawei per verificare se in tal caso si ottengono risultati migliori per questo produttore di dispositivi. 
 
-Per quanto riguarda le immagini scaricate da Facebook, il metodo si è mostrato non efficace. Questo è dovuto alla fatto che le immagini caricate su un social network subiscono, in genere, una compressione che va peggiorare la qualità delle PNRU estratte. Questo ha conseguenza a cascata su tutte le fasi del metodo: la soluzione dell'equazione che Normalized Cuts usa per partizionare il grafo incontra delle difficoltà, è difficile trovare una soglia per la condizione di stop della clusterizzazione e questo implica ottenere delle fingerprint molto rumorose e quindi non discriminanti.
+Per quanto riguarda le immagini scaricate da Facebook, il metodo si è mostrato non efficace. Questo è dovuto alla fatto che le immagini caricate su un social network subiscono, in genere, una compressione che va peggiorare la qualità delle PRNU estratte. Questo ha conseguenza a cascata su tutte le fasi del metodo: la soluzione dell'equazione che Normalized Cuts usa per partizionare il grafo incontra delle difficoltà, è difficile trovare una soglia per la condizione di stop della clusterizzazione e questo implica ottenere delle fingerprint molto rumorose e quindi non discriminanti.
 
-In conclusione, il metodo implementato funziona correttamente quando si estraggo delle PNRU di qualità dalle immagini, cosa non possibile se l'immagine è stata sottoposta ad una pesante compressione.
+In conclusione, il metodo implementato funziona correttamente quando si estraggono delle PRNU di qualità dalle immagini, cosa non possibile se l'immagine è stata sottoposta ad una pesante compressione.
