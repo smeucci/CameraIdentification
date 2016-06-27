@@ -30,14 +30,18 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     defaultNumImages = Inf;
     defaultRandom = false;
     defaultOutputPath = '';
+    defaultSourcePath = '';
     defaultOffset = 0;
+    defaultThreshold = 10^-5;
 
-    addOptional(p,'NumFolders', defaultNumFolder, @(x) isnumeric(x));
-    addOptional(p,'NumImages', defaultNumImages, @(x) isnumeric(x));
-    addOptional(p,'ExtractNoise', defaultExtract, @(x) islogical(x));
-    addOptional(p,'Random', defaultRandom, @(x) islogical(x));
-    addOptional(p,'OutputPath', defaultOutputPath);
+    addOptional(p, 'NumFolders', defaultNumFolder, @(x) isnumeric(x));
+    addOptional(p, 'NumImages', defaultNumImages, @(x) isnumeric(x));
+    addOptional(p, 'ExtractNoise', defaultExtract, @(x) islogical(x));
+    addOptional(p, 'Random', defaultRandom, @(x) islogical(x));
+    addOptional(p, 'SourcePath', defaultSourcePath);
+    addOptional(p, 'OutputPath', defaultOutputPath);
     addOptional(p, 'Offset', defaultOffset, @(x) isnumeric(x));
+    addOptional(p, 'Threshold', defaultThreshold, @(x) isnumeric(x));
     
     parse(p, varargin{:});
     extract_noise = p.Results.ExtractNoise;
@@ -45,8 +49,10 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     numImages = p.Results.NumImages;
     random = p.Results.Random;
     cluster_info_validation = true;
+    sourcePath = p.Results.SourcePath;
     outputPath = p.Results.OutputPath;
     offset = p.Results.Offset;
+    threshold = p.Results.Threshold;
     
     fprintf('Camera Identification\n');
     fprintf('  -Dataset path: %s\n', imgpath); 
@@ -55,6 +61,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     fprintf('  -Number of images per folder: %d\n', numImages);
     fprintf('  -Extract noise: %d\n', extract_noise);
     fprintf('  -Random images selection: %d\n', random);
+    fprintf('  -Source path: /mat/%s\n', sourcePath);
     fprintf('  -Output path: /mat/%s\n', outputPath);
 
     addpath('utils');
@@ -90,7 +97,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     %           Noise extraction                %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    if ~isempty(outputPath) && ~exist(['mat/' outputPath], 'dir')
+    if ~exist(['mat/' outputPath], 'dir')
         mkdir(['mat/' outputPath]);
     end
     
@@ -115,7 +122,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
                 width = size(PRNU, 2);
             end
                 
-            save(['mat/' outputPath 'image_prnu_' num2str(i) '.prnu'], 'PRNU');
+            save(['mat/' sourcePath 'image_prnu_' num2str(i) '.prnu'], 'PRNU');
             clear PRNU;
 
             counter = counter + 1;
@@ -130,11 +137,11 @@ function [output] = CameraIdentification(imgpath, type, varargin)
         fprintf('\nResizing noises to %d x %d\n\n', width, height);
         counter = 0;
         for i = 1:n_images
-            load(['mat/' outputPath 'image_prnu_' num2str(i) '.prnu'], '-mat');
+            load(['mat/' sourcePath 'image_prnu_' num2str(i) '.prnu'], '-mat');
             if(size(PRNU, 1) ~= height || size(PRNU, 2) ~= width)
                 PRNU = imresize(PRNU, [height width]);
             end
-            save(['mat/' outputPath 'image_prnu_' num2str(i) '.prnu'], 'PRNU');
+            save(['mat/' sourcePath 'image_prnu_' num2str(i) '.prnu'], 'PRNU');
             clear PRNU;
             counter = counter + 1;
             fprintf('Resized %d / %d images \n', counter, n_images);
@@ -154,11 +161,11 @@ function [output] = CameraIdentification(imgpath, type, varargin)
         counter = 0;
         total_weights = (n_images^2 - n_images)/2 + n_images;
         for i = 1:n_images
-            load(['mat/' outputPath 'image_prnu_' num2str(i) '.prnu'], '-mat');
+            load(['mat/' sourcePath 'image_prnu_' num2str(i) '.prnu'], '-mat');
             noisex = PRNU;
             clear PRNU;
             for j = i:n_images     
-                load(['mat/' outputPath 'image_prnu_' num2str(j) '.prnu'], '-mat');
+                load(['mat/' sourcePath 'image_prnu_' num2str(j) '.prnu'], '-mat');
                 noisey = PRNU;
                 clear PRNU;
                 weights(i, j) = PCEdistance(noisex, noisey);
@@ -179,24 +186,10 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     
     %Starts normalized cuts algorithm
     %To be implemented
-    clusters = normalizedCuts(weights);
+    clusters = normalizedCuts(weights, 'Threshold', threshold, 'Type', 'NC');
     
-    [tpr, fpr] = validateClusterResults(images, clusters);
-    fprintf('\nEvaluate clusters:\n');
-    fprintf('TPR: %.2f\n', tpr);
-    fprintf('FPR: %.2f\n', fpr);
-    save(['mat/' outputPath 'cluster_fpr_tpr.mat'], 'tpr', 'fpr');
-    clear weights;
-    
-    %Store table of the results of clustering operations
-    storeEvaluatedClusters(images, clusters);
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Saving fingerprints for clustered cameras %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-          
     n_clusters = length(clusters);
-    
+
     %Grouping clustered images
     for i = 1:n_clusters
         cluster = clusters{i};
@@ -205,7 +198,19 @@ function [output] = CameraIdentification(imgpath, type, varargin)
         end     
     end
     
+    fprintf('\nEvaluate clusters:\n');
+    [tpr, fpr] = validateClusterResults(images, clusters);
+    fprintf('TPR: %.5f\n', tpr);
+    fprintf('FPR: %.5f\n', fpr);
+    save(['mat/' outputPath 'cluster_fpr_tpr.mat'], 'tpr', 'fpr');
+    clear weights;
+    
     fprintf('\nClustering done. Found %d clusters.\n', n_clusters);
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Saving fingerprints for clustered cameras %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+              
     fprintf('Evaluating camera fingerprints.\n');
     
     if ~exist(['mat/' outputPath 'cameras'], 'dir')

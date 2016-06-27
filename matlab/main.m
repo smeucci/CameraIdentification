@@ -18,39 +18,37 @@ numImages = 50;
 random = false;
 warning off;
 
-
 try
-    %imgs nat%
-    type = 'imgs_nat';
-%     CameraIdentification(imgpath, type, 'NumFolders', 4, 'NumImages', ...
-%         numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_4/', 'Offset', 4);
-%     
-%     CameraIdentification(imgpath, type, 'NumFolders', 5, 'NumImages', ...
-%         numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_5/', 'Offset', 7);
-%     
-%     CameraIdentification(imgpath, type, 'NumFolders', 6, 'NumImages', ...
-%         numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_6/', 'Offset', 0);
-
-    Validation(validationPath, type, 'NumFolders', 4, 'NumImages', 20, 'OutputPath', 'imgs_nat_4/', 'Offset', 4);
-    Validation(validationPath, type, 'NumFolders', 5, 'NumImages', 20, 'OutputPath', 'imgs_nat_5/', 'Offset', 7);
-    Validation(validationPath, type, 'NumFolders', 6, 'NumImages', 20, 'OutputPath', 'imgs_nat_6/', 'Offset', 0);
-
 
     %facebook% 
     type = 'imgs_nat_fb_highres';
+
+    threshold = 4*10^-5;
+    CameraIdentification(imgpath, type, 'NumFolders', 4, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/', 'OutputPath', 'imgs_nat_fb_highres_4/', 'Offset', 4, 'Threshold', threshold);
     
+    CameraIdentification(imgpath, type, 'NumFolders', 5, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/','OutputPath', 'imgs_nat_fb_highres_5/', 'Offset', 7, 'Threshold', threshold);
+    
+    CameraIdentification(imgpath, type, 'NumFolders', 6, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/', 'OutputPath', 'imgs_nat_fb_highres_6/', 'Offset', 0, 'Threshold', threshold);
+
+    CameraIdentification(imgpath, type, 'NumFolders', 4, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/', 'OutputPath', 'imgs_nat_fb_highres_4_bis/', 'Offset', 8, 'Threshold', threshold);
+    
+    CameraIdentification(imgpath, type, 'NumFolders', 5, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/', 'OutputPath', 'imgs_nat_fb_highres_5_bis/', 'Offset', 4, 'Threshold', threshold);
+    
+    CameraIdentification(imgpath, type, 'NumFolders', 6, 'NumImages', ...
+        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/',  'OutputPath', 'imgs_nat_fb_highres_6_bis/', 'Offset', 6, 'Threshold', threshold);
+
     Validation(validationPath, type, 'NumFolders', 4, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_4/', 'Offset', 4);
     Validation(validationPath, type, 'NumFolders', 5, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_5/', 'Offset', 7);
     Validation(validationPath, type, 'NumFolders', 6, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_6/', 'Offset', 0);
+    Validation(validationPath, type, 'NumFolders', 4, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_4_bis/', 'Offset', 8);
+    Validation(validationPath, type, 'NumFolders', 5, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_5_bis/', 'Offset', 4);
+    Validation(validationPath, type, 'NumFolders', 6, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_6_bis/', 'Offset', 6);
 
-%     CameraIdentification(imgpath, type, 'NumFolders', 4, 'NumImages', ...
-%         numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_fb_highres_4/', 'Offset', 4);
-%     
-%     CameraIdentification(imgpath, type, 'NumFolders', 5, 'NumImages', ...
-%         numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_fb_highres_5/', 'Offset', 7);
-%     
-%     CameraIdentification(imgpath, type, 'NumFolders', 6, 'NumImages', ...
-%         numImages, 'ExtractNoise', false, 'Random', random, 'OutputPath', 'imgs_nat_fb_highres_6/', 'Offset', 0);
 catch
    disp('errore'); 
 end
