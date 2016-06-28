@@ -12,10 +12,19 @@ function [output] = CameraIdentification(imgpath, type, varargin)
 %   
 %   'ExtractNoise' : true/false if noise from images must be extracted
 %                    (default true)
-%   'Threads'      : number of threads to be used (default 1)
+%   'NumFolders'      : number folders to be taken from dataset
+%   'NumImages'      : number of images to be taken from each folder
+%   'Offset'      : offset of dataset folders (starts from 'offset' folder
+%                   number)
+%   'Random'      : if true gets random images from dataset folders
+%   'SourcePath'      : path for saving prnu data (inside mat folder)
+%   'OutputPath'      : path for saving camera fingerprints and output data
+%                           (inside mat folder)
+%   'Threshold'      : threshold for normalized cuts algorithm
 %
-%   USAGE  output = CameraIdentification(imgpath, 'imgs', 3,
-%               'ExtractNoise', true, 'Threads', 4)
+%   USAGE  CameraIdentification(imgpath, type, 'NumFolders', 4, 'NumImages', ...
+%        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', ...
+%        'imgs_nat_fb_highres/', 'OutputPath', 'imgs_nat_fb_highres_4/', 'Offset', 4, 'Threshold', threshold);
 %
 %   OUTPUT
 %   clustering matrix (?)

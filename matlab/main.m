@@ -11,58 +11,65 @@ addpath('ncuts');
 
 fprintf('CameraIdentification main script\n\n');
 
-imgpath = '../dataset/images/';
-validationPath = '../dataset/validation';
+imgpath = '../dataset/images/';  %dataset path
+sourcePath = 'source/'; %where prnu data are stored
+outputPath = 'output/'; %where reference pattern are store
+validationPath = '../dataset/validation'; %validation path
+numFolders = 4; %number of folders
+numImages = 50; %number of images from each folder
 
-numImages = 50;
-random = false;
-warning off;
 
-try
+%% Reference patterns extraction %%
 
-    %facebook% 
-    type = 'imgs_nat_fb_highres';
+% Script for extracting and saving camera reference patters
 
-    threshold = 4*10^-5;
-    CameraIdentification(imgpath, type, 'NumFolders', 4, 'NumImages', ...
-        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/', 'OutputPath', 'imgs_nat_fb_highres_4/', 'Offset', 4, 'Threshold', threshold);
+% 1) Extracts images PRNU and store them in source path directory
+% 2) Resizes PRNU to the same dimensions (for further processing)
+% 3) Computes weights matrix with PCE distances between each PRNU
+% 4) Clustering of images wrt weight matrix usign normalized cuts
+% 5) Reference pattern for each camera evaluation
+% 6) Store reference patterns in output path, cameras subfolder
+
+%If called with ExtractNoise set to false, PRNU and weight matrix are not
+%exracted and proceed to the reference patterns generation using weight
+%matrix found in source path
+
+
+CameraIdentification(imgpath, type, 'NumFolders', numFolders, 'NumImages', ...
+        numImages, 'ExtractNoise', true, 'Random', random, 'SourcePath', ...
+        sourcePath, 'OutputPath', outputPath);    
     
-    CameraIdentification(imgpath, type, 'NumFolders', 5, 'NumImages', ...
-        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/','OutputPath', 'imgs_nat_fb_highres_5/', 'Offset', 7, 'Threshold', threshold);
     
-    CameraIdentification(imgpath, type, 'NumFolders', 6, 'NumImages', ...
-        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/', 'OutputPath', 'imgs_nat_fb_highres_6/', 'Offset', 0, 'Threshold', threshold);
+%% Image camera prediction %%
+% Predict image source camera
 
-    CameraIdentification(imgpath, type, 'NumFolders', 4, 'NumImages', ...
-        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/', 'OutputPath', 'imgs_nat_fb_highres_4_bis/', 'Offset', 8, 'Threshold', threshold);
-    
-    CameraIdentification(imgpath, type, 'NumFolders', 5, 'NumImages', ...
-        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/', 'OutputPath', 'imgs_nat_fb_highres_5_bis/', 'Offset', 4, 'Threshold', threshold);
-    
-    CameraIdentification(imgpath, type, 'NumFolders', 6, 'NumImages', ...
-        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', 'imgs_nat_fb_highres/',  'OutputPath', 'imgs_nat_fb_highres_6_bis/', 'Offset', 6, 'Threshold', threshold);
+% 1) Extracts filename PRNU
+% 2) Resizes PRNU to the same dimensions of the found camera in output dir
+% 3) Computes PCE distance between current PRNU and each reference pattern
+% 4) Return the camera id with the best affinity value (PCE module)
 
-    Validation(validationPath, type, 'NumFolders', 4, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_4/', 'Offset', 4);
-    Validation(validationPath, type, 'NumFolders', 5, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_5/', 'Offset', 7);
-    Validation(validationPath, type, 'NumFolders', 6, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_6/', 'Offset', 0);
-    Validation(validationPath, type, 'NumFolders', 4, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_4_bis/', 'Offset', 8);
-    Validation(validationPath, type, 'NumFolders', 5, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_5_bis/', 'Offset', 4);
-    Validation(validationPath, type, 'NumFolders', 6, 'NumImages', 20, 'OutputPath', 'imgs_nat_fb_highres_6_bis/', 'Offset', 6);
+[camera, affinity] = CameraValidation(filename, outputPath);
 
-catch
-   disp('errore'); 
-end
-exit;
 
-%[th, acc] = crossvalidateThreshold(imgpath, 14, 30, weights, 0:10^-6:10^-3, 'NC');
-%fprintf('\nBest threshold NC: %f, accuracy: %f', th, acc);
+%% Validation %%
+% Predict and evaluate results for prediction on a validation set
 
-%[th, acc] = crossvalidateThreshold(imgpath, 14, 30, weights, 0.9:10^-5:1, 'AC');
-%fprintf('\nBest threshold AC: %f, accuracy: %f', th, acc);
+% 1) Calls CameraValidation for each images in validation path (given num
+% folders and number of images from each folder)
+% 2) Plot confusion matrix of the results
 
-    %confusionMatrix = Validation(imgpath, type, 'NumFolders', numFolders, 'NumImages', 10, 'OutputPath', outputPath);
-    %save('mat/confusionMatrix.mat', 'confusionMatrix');
-%catch
-%   disp('errore'); 
-%end
-%exit;
+Validation(validationPath, type, 'NumFolders', numFolders, ...
+        'NumImages', 20, 'OutputPath', outputPath);
+
+
+%% Crossvalidate clustering threshold %%
+% Crossvalidate thresholds for normalized cuts algorithm based on FRP and TPR in
+% clustering operations
+
+% weights : the weights matrix of PCE distance for that set of images
+% range : the range to explore for thresholds
+% type : type of normalized cuts thresholds, 'NC' or 'AC'
+
+[tprs, fprs, thresholds] = crossvalidateThreshold(imgpath, numFolders, numImages, ...
+                                        weights, range, type);
+                                    
