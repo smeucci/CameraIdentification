@@ -1,7 +1,7 @@
 \section{Clustering}
 
 Il metodo di identificazione di dispositivi ignoti a partire da un'insieme di immagini digitali campione prevede una fase di clustering che, usando la PRNU di ciascuna immagine, va a suddividere tale insieme in un sotto insieme di immagini simili, ovvero con lo stesso pattern noise e quindi, presumibilmente, provenienti dallo stesso sensore.
-L'insieme delle PRNU delle immagini viene rappresentato con un grafo pesato completamente connesso, in cui le PRNU, e quindi le immagini, rappresentano i nodi. I pesi associati a ciascun arco sono calcolati con la PCE (Peak-to-Correlation Energy), una misura di similarità che si adatta molto bene per le fingerprint, calcolate con la PRNU, di immagini bidimensionali. La caratteristica principale di tale misura è che la presenza di pattern periodici nascosti diminuisce la PCE. Quindi il peso associato all'arco sarà tanto più alto quanto più i nodi interessati avranno una PRNU simile. Il grafo pesato può essere rappresentato da una matrice quadrata $N\times N$, con N numero di immagini.
+L'insieme delle PRNU delle immagini viene rappresentato con un grafo pesato completamente connesso, in cui le PRNU, e quindi le immagini, rappresentano i nodi. I pesi associati a ciascun arco sono calcolati con la PCE (Peak-to-Correlation Energy), una misura di similarità che si adatta molto bene per le fingerprints, calcolate con la PRNU, di immagini bidimensionali. La caratteristica principale di tale misura è che la presenza di pattern periodici nascosti diminuisce la PCE. Quindi il peso associato all'arco sarà tanto più alto quanto più i nodi interessati avranno una PRNU simile. Il grafo pesato può essere rappresentato da una matrice quadrata $N\times N$, con N numero di immagini.
 Calcolare la PCE per tutti i nodi del grafo è una delle operazioni più costose del metodo di identificazione implementato, infatti calcolare la matrice dei pesi ha complessità quadratica con il numero di immagini.
 
 Una volta costruito il grafo pesato possiamo procedere con la fase di clusterizzazione, per suddividere le immagini in gruppi di immagini simili, in base alla loro PRNU.
@@ -9,7 +9,7 @@ Una volta costruito il grafo pesato possiamo procedere con la fase di clusterizz
 
 \subsection{Normalized Cuts}
 
-Dato una grafo $ G = <V, E> $, gli archi $E$ che connettono ciascuna coppia di nodi, ovvero di PNRU, sono pesati con la PCE, come descritto in precedenza, dove $PCE(i, j)$ rappresenta la similarità fra il nodo $i$ e il nodo $j$.
+Dato una grafo $ G = <V, E> $, gli archi $E$ che connettono ciascuna coppia di nodi, ovvero di PRNU, sono pesati con la PCE, come descritto in precedenza, dove $PCE(i, j)$ rappresenta la similarità fra il nodo $i$ e il nodo $j$.
 L'algoritmo di clusterizzazione Normalized Cuts è un algoritmo ricorsivo, che ad ogni iterazione, bipartiziona il grafo G, creando quindi due sottografi A e B ($A\cup B = V$ e $A\cap B = \emptyset$). Una volta ottenuti due sottografi è possibile dare un valore del taglio, ovvero calcolare il peso totale  degli archi rimossi che fornisce una stima sul grado di dissimilarità di questi due sottografi. Il taglio è calcolato come segue: 
 
 \begin{equation}
@@ -37,8 +37,8 @@ La soluzione $\gamma$, che rappresenta il taglio, dovrebbe essere un vettore di 
 \begin{equation}
 (D-A) \gamma = \lambda D \gamma
 \end{equation}
-Poichè il più piccolo autovalore di $(D-A)$ è pari a zero, può essere dimostrato che la soluzione all'equazione è l'autovettore corrispondente al secondo più piccolo autovalore.
-Una volta ottenuta la soluzione reale è necessario discretizzarla nei valori $\lbrace 0,1 \rbrace$. Occore quindi scegliere un valore di soglia. Per fare ciò si può utilizzare il valore 0 o il valore mediano fra gli elementi della soluzione come valore di soglia oppure si può scegliere il valore, fra gli elementi della soluzione, che minimizza il valore di $Ncut(A,B)$.
+Poiché il più piccolo autovalore di $(D-A)$ è pari a zero, può essere dimostrato che la soluzione all'equazione è l'autovettore corrispondente al secondo più piccolo autovalore.
+Una volta ottenuta la soluzione reale è necessario discretizzarla nei valori $\lbrace 0,1 \rbrace$. Occorre quindi scegliere un valore di soglia. Per fare ciò si può utilizzare il valore 0 o il valore mediano fra gli elementi della soluzione come valore di soglia oppure si può scegliere il valore, fra gli elementi della soluzione, che minimizza il valore di $Ncut(A,B)$.
 
 La procedura di bipartizione del grafo può essere riassunta come segue:
 \begin{enumerate}
@@ -60,7 +60,7 @@ Il range di variazione della soglia $T_{k}$ differisce a seconda del metodo util
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.4\textwidth]{images/soglia_imgnat_AC.png}
+\includegraphics[width=0.45\textwidth]{images/soglia_imgnat_AC.png}
 \end{center}
   \caption{Valori di TPR e FPR al variare della soglia per le immagini naturali acquisite direttamente dai dispositivi. Metodo con coefficiente di aggregazione.}
 \label{fig:soglia AC}
@@ -68,7 +68,7 @@ Il range di variazione della soglia $T_{k}$ differisce a seconda del metodo util
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.4\textwidth]{images/soglia_imgnat_NC.png}
+\includegraphics[width=0.45\textwidth]{images/soglia_imgnat_NC.png}
 \end{center}
   \caption{Valori di TPR e FPR al variare della soglia per le immagini naturali acquisite direttamente dai dispositivi. Metodo che considera i valori di $Ncuts$.}
 \label{fig:soglia AC}
@@ -76,7 +76,7 @@ Il range di variazione della soglia $T_{k}$ differisce a seconda del metodo util
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.4\textwidth]{images/soglia_imgnat_fb_AC.png}
+\includegraphics[width=0.45\textwidth]{images/soglia_imgnat_fb_AC.png}
 \end{center}
   \caption{Valori di TPR e FPR al variare della soglia per le immagini scaricate da Facebook. Metodo con coefficiente di aggregazione.}
 \label{fig:soglia AC}
@@ -84,13 +84,13 @@ Il range di variazione della soglia $T_{k}$ differisce a seconda del metodo util
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.4\textwidth]{images/soglia_imgnat_fb_NC.png}
+\includegraphics[width=0.45\textwidth]{images/soglia_imgnat_fb_NC.png}
 \end{center}
   \caption{Valori di TPR e FPR al variare della soglia per le immagini scaricate da Facebook. Metodo che considera i valori di $Ncuts$.}
 \label{fig:soglia AC}
 \end{figure}
 
 Nella nostra implementazione, come si può notare dai risultati, il metodo che utilizza $Ncut$ risulta essere il migliore quando vengono usate le immagini direttamente acquisite dai dispositivi. Per questo caso è stata selezionata come migliore soglia $T_{k} = 10^{-5}$ che corrisponde al valore massimo di TPR, pari a 0.75, e al valore minimo di FPR, pari a 0; ciò significa che le immagini non sono perfettamente raggruppate, ovvero il numero di clusters è maggiore di quello atteso, ma al contempo i clusters ottenuti sono "puliti", ovvero sono composti solo da elementi simili, non contengono, cioè, falsi positivi.
-Per il caso delle immagini provenienti da Facebook, il confronto fra i due metodi è più incerto. Ciò è probabilmente dovuto al fatto che, subendo una compressione, la PRNU di tali immagini perde informazione in grado di discriminarle a sufficienza. Infatti i risultati ottenuti mostrano un numero significativo di falsi positivi contenuti nei clusters in entrambi i metodi, una situazione non desiderabile poichè è a partire da tali clusters che verranno calcolate le fingerprints relative ai dispositivi. Inoltre i minimi valori di FPR si ottengono in corrispondenza dei minimi valori di TPR; ciò indica che i clusters ottenuti sono perlopiù cluster singoli o con pochi elementi, altro caso non desiderabile. Tuttavia, per coerenza con il caso precendente, è stata scelto di utilizzare il metodo relativo a $Ncuts$, poichè mostra più consistenza con il valore ottimale della soglia $T_{k}$ del caso precedente, questa volta pari a $4*10^{-5}$ e che corrisponde al valore minimo di FPR.
+Per il caso delle immagini provenienti da Facebook, il confronto fra i due metodi è più incerto. Ciò è probabilmente dovuto al fatto che, subendo una compressione, la PRNU di tali immagini perde informazione in grado di discriminarle a sufficienza. Infatti i risultati ottenuti mostrano un numero significativo di falsi positivi contenuti nei clusters in entrambi i metodi, una situazione non desiderabile poiché è a partire da tali clusters che verranno calcolate le fingerprints relative ai dispositivi. Inoltre i minimi valori di FPR si ottengono in corrispondenza dei minimi valori di TPR; ciò indica che i clusters ottenuti sono perlopiù cluster singoli o con pochi elementi, altro caso non desiderabile. Tuttavia, per coerenza con il caso precedente, è stata scelto di utilizzare il metodo relativo a $Ncuts$, poiché mostra più consistenza con il valore ottimale della soglia $T_{k}$ del caso precedente, questa volta pari a $4*10^{-5}$ e che corrisponde al valore minimo di FPR.
 
 In generale la scelta della soglia ottimale è stata fatta minimizzando il valore dei falsi positivi all'interno dei clusters calcolati; è preferibile ottenere più clusters ma che genereranno fingerprints senza rumore, piuttosto che un numero esatto di clusters da cui però si otterranno fingerprints rumorose.
