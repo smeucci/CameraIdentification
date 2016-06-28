@@ -19,23 +19,3 @@ A partire da tale metodo, il nostro lavoro presenta alcune variazioni:
 Le immagini utilizzate per valutare le performance di questo metodo sono sia immagini prese direttamente dopo l'acquisizione sia dopo essere stata caricate e poi riscaricate da Facebook, subendo quindi una compressione.
 
 L'articolo è organizzato come segue: la Sezione 2 descrive la fase di estrazione delle PRNU; la Sezione 3 presenta in maggiore dettaglio l'algoritmo Normalized Cuts usato per la clusterizzazione delle PRNU e l'utilizzo della PCE per il calcolo del grafo pesato; la Sezione 4 fornisce dettagli su come le fingerprints sono calcolate a partire da ciascun cluster ottenuto; la Sezione 5 spiega come funziona il processo di validazione delle fingerprints ottenute; la Sezione 6 commenta i risultati e infine la Sezione 7 conclude l'articolo.
-
-
-\begin{table}[ht]
-\caption{Accuratezza del clustering}
-\centering % used for centering table
-\begin{tabular}{l c c c} % centered columns (4 columns)
-\hline\hline %inserts double horizontal lines
-Caso & Clusters & TPR & FPR \\ [0.5ex] % inserts table
-%heading
-\hline % inserts single horizontal line
-Natural images (4) & 5 & 0.800 & 0.000 \\ % inserting body of the table
-Natural images (5) & 7 & 0.714 & 0.000 \\
-Natural images (6) & 8 & 0.750 & 0.000 \\
-Facebook highres images (4) & 12 & 0.294 & 0.004 \\
-Facebook highres images (5) & 12 & 0.333 & $10^{-5}$ \\
-Facebook highres images (6) & 20 & 0.298 & $10^{-4}$ \\ [1ex] % [1ex] adds vertical space
-\hline %inserts single line
-\end{tabular}
-\label{table:nonlin} % is used to refer this table in the text
-\end{table}
