@@ -1,0 +1,7 @@
+\frametitle {Block: codice (II)}Più in generale, Beamer offre la possibilità di utilizzare tre ambienti \emph{block}:
+\begin{itemize}
+\item \highlight{block}
+\item \highlight{alertblock}
+\item \highlight{exampleblock}
+\end{itemize}
+Per avere più dettagli, e non solo su questo argomento, suggerisco di leggere la \href{http://mirrors.ctan.org/macros/latex/contrib/beamer/doc/beameruserguide.pdf}{beameruserguide}.
