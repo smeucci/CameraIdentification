@@ -26,7 +26,7 @@ La condizione di stop per l'algoritmo di clustering Normalized Cuts dipende dall
 Due diversi approcci sono stati confrontati:
 \begin{itemize}
 \item Comparare il valore di $Ncut(A, B)$ ad una soglia $T_{k}$ predefinita, come prevede l'implementazione originale dell'algoritmo.
-\item Calcolare un coefficiente di aggregazione [1] per ciascuna delle partizioni ottenute e confrontare tale valore per una soglia $T_{k}$ predefinita, calcolato come segue: $AC(k) = \frac{1}{N_{k}} \sum_{i, j} w_{ij}$ ovvero il valore medio dei pesi associati ai nodi che appartengono alla partizione $k$.
+\item Calcolare un coefficiente di aggregazione [1] per ciascuna delle partizioni ottenute e confrontare tale valore per una soglia $T_{k}$ predefinita, calcolato come segue: $AC(k) = \frac{1}{N_{k}} \sum_{i, j} w_{ij}$, ovvero il valore medio dei pesi associati ai nodi che appartengono alla partizione $k$.
 \end{itemize}
 
 \vspace{0.1in}
