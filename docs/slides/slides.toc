@@ -1,3 +1,0 @@
-\beamer@endinputifotherversion {3.24pt}
-\select@language {italian}
-\select@language {italian}
