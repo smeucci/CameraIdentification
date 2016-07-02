@@ -2,13 +2,13 @@
 
 \begin{tframe}{Dataset}
 
-Il dataset che contiene un totale di 12 dispositivi, che includono smartphone e tablet, di diverse case produttrici e modelli.
+Il dataset contiene un totale di \textbf{12 dispositivi}, che includono smartphone e tablet, di diverse case produttrici e modelli.
 
-\vspace{0.1in}
+\vspace{0.3cm}
 
-In particolare i modelli in nostro possesso sono: un Galaxy S3, due Galaxy S3 mini, un Galaxy S4 mini, un Galaxy Tab 3, un Galaxy Tab, un Galaxy Trend Plus, un Huawei G6, un Ipad 2, un Ipad mini, un Iphone 4S, un Iphone 5. 
+In particolare i modelli in nostro possesso sono: un \emph{Galaxy S3}, due \emph{Galaxy S3 mini}, un \emph{Galaxy S4 mini}, un \emph{Galaxy Tab 3}, un \emph{Galaxy Tab}, un \emph{Galaxy Trend Plus}, un \emph{Huawei G6}, un \emph{Ipad 2}, un \emph{Ipad mini}, un \emph{Iphone 4S}, un \emph{Iphone 5}. 
 
-\vspace{0.1in}
+\vspace{0.3cm}
 
 Di tutti questi dispositivi siamo in possesso di immagini direttamente acquisite (immagini naturali) e delle stesse immagini ma caricate e scaricate da Facebook.
 
@@ -26,7 +26,7 @@ La condizione di stop per l'algoritmo di clustering Normalized Cuts dipende dall
 Due diversi approcci sono stati confrontati:
 \begin{itemize}
 \item Comparare il valore di $Ncut(A, B)$ ad una soglia $T_{k}$ predefinita, come prevede l'implementazione originale dell'algoritmo.
-\item Calcolare un coefficiente di aggregazione [1] per ciascuna delle partizioni ottenute e confrontare tale valore per una soglia $T_{k}$ predefinita, calcolato come segue: $AC(k) = \frac{1}{N_{k}} \sum_{i, j} w_{ij}$, ovvero il valore medio dei pesi associati ai nodi che appartengono alla partizione $k$.
+\item Calcolare un \textbf{coefficiente di aggregazione} [1] per ciascuna delle partizioni ottenute e confrontare tale valore per una soglia $T_{k}$ predefinita, calcolato come segue: $AC(k) = \frac{1}{N_{k}} \sum_{i, j} w_{ij}$, ovvero il valore medio dei pesi associati ai nodi che appartengono alla partizione $k$.
 \end{itemize}
 
 \vspace{0.1in}
@@ -37,9 +37,9 @@ In entrambi i casi, la soglia è stata determinata attraverso uno studio dei val
 
 \begin{tframe}{Threshold}
 
-In generale, è stata scelta la soglia per la quale è minimo il valore di FPR, poiché la priorità è minimizzare il numero di falsi positivi all'interno dei clusters. A partire da questi, infatti, verranno calcolate le fingerprints.
+In generale, è stata scelta la soglia per la quale è \textbf{minimo} il valore di FPR, poiché la priorità è minimizzare il numero di falsi positivi all'interno dei clusters. A partire da questi, infatti, verranno calcolate le fingerprints.
 
-\vspace{0.1in}
+\vspace{0.3cm}
 
 Tale studio è stato effetuato sia per le immagini naturali che per le immagini scaricate da Facebook. Sono stati considerati tutti e 12 i dispositivi, utilizzando 50 immagini da ciascuno.
 
@@ -97,11 +97,11 @@ Tale studio è stato effetuato sia per le immagini naturali che per le immagini 
 
 Come mostrato nei grafici, i valori di TPR e FPR sono consistentemente migliori per il metodo che considera i valori di $Ncut(A, B)$. Per tale motivo è stato scelto di usare tale metodo, ovvero l'approccio standard dell'algoritmo Normalized Cuts.
 
-\vspace{0.1in}
+\vspace{0.2cm}
 
 La soglia ottimale per le immagini naturali è pari a $10^{-5}$, corrispondente a TPR = 0.75 e FPR = 0.
 
-\vspace{0.1in}
+\vspace{0.2cm}
 
 Invece, la soglia ottimale per le immagini scaricate da Facebook è pari a $4*10^{-5}$, corrispondente a TPR = 0.2 e FPR prossima allo zero.
 
@@ -177,13 +177,13 @@ C & Facebook highres images & 12 & 0.294 & 0.004 \\ [1ex] % [1ex] adds vertical 
 
 Nelle slides seguenti verranno mostrati i risultati della fase di validazione per i vari esperimenti, sia per le immagini naturali che per le immagini scaricate da Facebook.
 
-\vspace{0.1in}
+\vspace{0.2cm}
 
 Per la fase di validazione l'accuratezza è stata calcolata confrontando le associazioni con un groundtruth. Da ciascuna camera sono state utilizzate 20 immagini, non precedentemente usate nella fase di estrazione delle fingerprints.
 
-\vspace{0.1in}
+\vspace{0.2cm}
 
-I risultati sono rappresentati tramite l'uso di matrici di confusione.
+I risultati sono rappresentati tramite l'uso di \textbf{matrici di confusione}.
 
 \end{tframe}
 
@@ -259,7 +259,7 @@ I risultati sono rappresentati tramite l'uso di matrici di confusione.
 
 \end{tframe}
 
-\begin{tframe}{Esperimenti}
+\begin{tframe}{Considerazioni}
 
 Come mostrato dalle matrici di confusione, i risultati per le immagini naturali sono ottimi tranne che per il dispositivo Huawei G6.
 
