@@ -79,6 +79,10 @@ function clusters = CameraIdentification(imgpath, type, varargin)
     addpath('rwt-master/bin');
     addpath('ncuts');
     
+    if ~exist('mat/', 'dir')
+        mkdir('mat/');
+    end
+    
     %Constants mat filenames
     mat_images_weights = 'images_weights.mat';
     
