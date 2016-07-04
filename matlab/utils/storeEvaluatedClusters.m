@@ -1,4 +1,4 @@
-function storeEvaluatedClusters(images, clusters)
+function storeEvaluatedClusters(images, clusters, outputPath)
 %Display evaluated class in table
     
     labels = cell(length(images), 1);
@@ -12,7 +12,7 @@ function storeEvaluatedClusters(images, clusters)
     T = table({images.name}', labels, ...
         'VariableNames', {'Image', 'Cluster'});
     
-    writetable(T, 'clusters.txt', 'Delimiter',' ')
+    writetable(T, ['mat/' outputPath 'clusters.txt'], 'Delimiter',' ')
     
 end
 

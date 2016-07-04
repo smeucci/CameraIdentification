@@ -1,4 +1,4 @@
-function [output] = CameraIdentification(imgpath, type, varargin)
+function clusters = CameraIdentification(imgpath, type, varargin)
 % Camera images clustering for camera identification
 %
 %   INPUTS
@@ -6,7 +6,6 @@ function [output] = CameraIdentification(imgpath, type, varargin)
 %
 %   imgpath  : path of reference images
 %   type     : the types of the images (name of the folder)
-%   n        : the number of images to be taken from each folder
 %   
 %   Optional parameters (key, value)
 %   
@@ -22,12 +21,13 @@ function [output] = CameraIdentification(imgpath, type, varargin)
 %                           (inside mat folder)
 %   'Threshold'      : threshold for normalized cuts algorithm
 %
+%   OUTPUT
+%        
+%        clusters: the evaluated clusters
 %   USAGE  CameraIdentification(imgpath, type, 'NumFolders', 4, 'NumImages', ...
 %        numImages, 'ExtractNoise', false, 'Random', random, 'SourcePath', ...
 %        'imgs_nat_fb_highres/', 'OutputPath', 'imgs_nat_fb_highres_4/', 'Offset', 4, 'Threshold', threshold);
 %
-%   OUTPUT
-%   clustering matrix (?)
 % ----------------------------------------------------
 % Authors: Lorenzo Cioni, Saverio Meucci
 % ----------------------------------------------------
@@ -41,7 +41,7 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     defaultOutputPath = '';
     defaultSourcePath = '';
     defaultOffset = 0;
-    defaultThreshold = 10^-5;
+    defaultThreshold = 4*10^-5;
 
     addOptional(p, 'NumFolders', defaultNumFolder, @(x) isnumeric(x));
     addOptional(p, 'NumImages', defaultNumImages, @(x) isnumeric(x));
@@ -99,8 +99,8 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     
     width = Inf;
     height = Inf;
-    minWidthThreshold = 800;
-    minHeightThreshold = 600;
+    minWidthThreshold = 400;
+    minHeightThreshold = 300;
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %           Noise extraction                %
@@ -212,10 +212,13 @@ function [output] = CameraIdentification(imgpath, type, varargin)
     fprintf('TPR: %.5f\n', tpr);
     fprintf('FPR: %.5f\n', fpr);
     save(['mat/' outputPath 'cluster_fpr_tpr.mat'], 'tpr', 'fpr');
-    clear weights;
+    
+    fprintf('\nStore evaluated clusters in clusters.txt\n');
+    storeEvaluatedClusters(images, clusters, outputPath);
     
     fprintf('\nClustering done. Found %d clusters.\n', n_clusters);
-    
+    clear weights;
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Saving fingerprints for clustered cameras %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -12,11 +12,52 @@ addpath('ncuts');
 fprintf('CameraIdentification main script\n\n');
 
 imgpath = '../dataset/images/';  %dataset path
-sourcePath = 'source/'; %where prnu data are stored
-outputPath = 'output/'; %where reference pattern are store
 validationPath = '../dataset/validation'; %validation path
+
+sourcePath = 'source/'; %where prnu data are stored (inside mat folder)
+outputPath = 'output/'; %where reference pattern are store (inside mat folder)
+
+% Dataset and validation structure
+% imgpath -> device_name -> image_type
+
+% imgpath
+%     ??? galaxy3_dasara
+%     |   ??? imgs
+%     |   ??? imgs_nat
+%     |   ??? imgs_nat_fb
+%     |   ??? imgs_nat_fb_highres
+%     ??? ipad2_giulia
+%     |   ??? imgs
+%     |   ??? imgs_nat
+%     |   ??? imgs_nat_fb
+%     |   ??? imgs_nat_fb_highres
+%     ??? ...
+%
+% 
+% Validation path and img path have the same structures
+%
+% validationPath
+%     ??? galaxy3_dasara
+%     |   ??? imgs
+%     |   ??? imgs_nat
+%     |   ??? imgs_nat_fb
+%     |   ??? imgs_nat_fb_highres
+%     ??? ipad2_giulia
+%     |   ??? imgs
+%     |   ??? imgs_nat
+%     |   ??? imgs_nat_fb
+%     |   ??? imgs_nat_fb_highres
+%     ??? ...
+
+%  image types:
+%     - imgs: images of the sky
+%     - imgs_nat: generic images
+%     - imgs_nat_fb: the same imgs_nat images uploaded and downloaded on Facebook
+%     - imgs_nat_fb_highres: the same imgs_nat images uploaded and downloaded on Facebook (high resolution)
+
 numFolders = 4; %number of folders
 numImages = 50; %number of images from each folder
+imgtype = 'imgs_nat';
 
 
 %% Reference patterns extraction %%
@@ -35,8 +76,8 @@ numImages = 50; %number of images from each folder
 %matrix found in source path
 
 
-CameraIdentification(imgpath, type, 'NumFolders', numFolders, 'NumImages', ...
-        numImages, 'ExtractNoise', true, 'Random', random, 'SourcePath', ...
+CameraIdentification(imgpath, imgtype, 'NumFolders', numFolders, 'NumImages', ...
+        numImages, 'ExtractNoise', true, 'SourcePath', ...
         sourcePath, 'OutputPath', outputPath);    
     
     
