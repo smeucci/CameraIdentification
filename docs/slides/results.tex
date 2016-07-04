@@ -45,7 +45,7 @@ Tale studio è stato effetuato sia per le immagini naturali che per le immagini 
 
 \end{tframe}
 
-\begin{tframe}{Threshold}
+\begin{tframe}{Threshold \emph{- Immagini naturali AC}}
 
 \begin{figure}[h]
 \begin{center}
@@ -57,7 +57,7 @@ Tale studio è stato effetuato sia per le immagini naturali che per le immagini 
 
 \end{tframe}
 
-\begin{tframe}{Threshold}
+\begin{tframe}{Threshold \emph{- Immagini naturali NC}}
 
 \begin{figure}[h]
 \begin{center}
@@ -69,7 +69,7 @@ Tale studio è stato effetuato sia per le immagini naturali che per le immagini 
 
 \end{tframe}
 
-\begin{tframe}{Threshold}
+\begin{tframe}{Threshold \emph{- Immagini Facebook AC}}
 
 \begin{figure}[h]
 \begin{center}
@@ -81,7 +81,7 @@ Tale studio è stato effetuato sia per le immagini naturali che per le immagini 
 
 \end{tframe}
 
-\begin{tframe}{Threshold}
+\begin{tframe}{Threshold \emph{- Immagini Facebook NC}}
 
 \begin{figure}[h]
 \begin{center}
@@ -99,11 +99,11 @@ Come mostrato nei grafici, i valori di TPR e FPR sono consistentemente migliori 
 
 \vspace{0.2cm}
 
-La soglia ottimale per le immagini naturali è pari a $10^{-5}$, corrispondente a TPR = 0.75 e FPR = 0.
+La soglia ottimale per le immagini naturali è pari a $4*10^{-5}$, corrispondente a TPR = 0.75 e FPR = 0.
 
 \vspace{0.2cm}
 
-Invece, la soglia ottimale per le immagini scaricate da Facebook è pari a $4*10^{-5}$, corrispondente a TPR = 0.2 e FPR prossima allo zero.
+Anche la soglia ottimale per le immagini scaricate da Facebook è pari a $4*10^{-5}$, corrispondente a TPR = 0.2 e FPR prossima allo zero.
 
 \end{tframe}
 
@@ -111,7 +111,7 @@ Invece, la soglia ottimale per le immagini scaricate da Facebook è pari a $4*10
 
 \begin{tframe}{Esperimenti}
 
-Il dataset è stato diviso in tre insiemi da 4, 5 e 6 dispositivi. Gli esperimenti per la fase di validazione sono stati eseguiti sia per le immagini naturali che per le immagini scaricate da Facebook.
+Il dataset è stato diviso in tre insiemi da 6, 5 e 4 dispositivi. Gli esperimenti per la fase di validazione sono stati eseguiti sia per le immagini naturali che per le immagini scaricate da Facebook.
 
 \begin{table}[ht]
 \centering % used for centering table
@@ -162,8 +162,8 @@ A & Natural images & 8 & 0.750 & 0.000 \\ % inserting body of the table
 B & Natural images & 7 & 0.714 & 0.000 \\
 C & Natural images & 5 & 0.800 & 0.000 \\
 \\
-A & Facebook highres images & 20 & 0.298 & $10^{-4}$ \\ 
-B & Facebook highres images & 12 & 0.333 & $10^{-5}$ \\
+A & Facebook highres images & 20 & 0.298 & $< 10^{-2}$ \\ 
+B & Facebook highres images & 12 & 0.333 & $< 10^{-2}$ \\
 C & Facebook highres images & 12 & 0.294 & 0.004 \\ [1ex] % [1ex] adds vertical space
 \hline %inserts single line
 \end{tabular}
@@ -187,7 +187,7 @@ I risultati sono rappresentati tramite l'uso di \textbf{matrici di confusione}.
 
 \end{tframe}
 
-\begin{tframe}{Esperimenti}
+\begin{tframe}{Esperimenti \emph{- Immagini naturali A}}
 
 \begin{figure}[h]
 \begin{center}
@@ -199,7 +199,7 @@ I risultati sono rappresentati tramite l'uso di \textbf{matrici di confusione}.
 
 \end{tframe}
 
-\begin{tframe}{Esperimenti}
+\begin{tframe}{Esperimenti \emph{- Immagini naturali B}}
 
 \begin{figure}[h]
 \begin{center}
@@ -211,7 +211,7 @@ I risultati sono rappresentati tramite l'uso di \textbf{matrici di confusione}.
 
 \end{tframe}
 
-\begin{tframe}{Esperimenti}
+\begin{tframe}{Esperimenti \emph{- Immagini naturali C}}
 
 \begin{figure}[h]
 \begin{center}
@@ -223,7 +223,7 @@ I risultati sono rappresentati tramite l'uso di \textbf{matrici di confusione}.
 
 \end{tframe}
 
-\begin{tframe}{Esperimenti}
+\begin{tframe}{Esperimenti \emph{- Immagini Facebook A}}
 
 \begin{figure}[h]
 \begin{center}
@@ -235,7 +235,7 @@ I risultati sono rappresentati tramite l'uso di \textbf{matrici di confusione}.
 
 \end{tframe}
 
-\begin{tframe}{Esperimenti}
+\begin{tframe}{Esperimenti \emph{- Immagini Facebook B}}
 
 \begin{figure}[h]
 \begin{center}
@@ -247,7 +247,7 @@ I risultati sono rappresentati tramite l'uso di \textbf{matrici di confusione}.
 
 \end{tframe}
 
-\begin{tframe}{Esperimenti}
+\begin{tframe}{Esperimenti \emph{- Immagini Facebook C}}
 
 \begin{figure}[h]
 \begin{center}
