@@ -83,6 +83,10 @@ function clusters = CameraIdentification(imgpath, type, varargin)
         mkdir('mat/');
     end
     
+    if ~exist(['mat/' sourcePath], 'dir')
+        mkdir(['mat/' sourcePath]);
+    end
+    
     %Constants mat filenames
     mat_images_weights = 'images_weights.mat';
     
@@ -242,6 +246,6 @@ function clusters = CameraIdentification(imgpath, type, varargin)
         fprintf('Fingerprint extracted in: %.2f s\n', etime(clock, start_time));
     end    
     
-    fprintf('\n\nCamera extraction finished!');
+    fprintf('\n\nCamera extraction finished!\n');
     
 end

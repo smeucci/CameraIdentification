@@ -99,7 +99,7 @@ CameraIdentification(imgpath, imgtype, 'NumFolders', numFolders, 'NumImages', ..
 % folders and number of images from each folder)
 % 2) Plot confusion matrix of the results
 
-Validation(validationPath, type, 'NumFolders', numFolders, ...
+Validation(validationPath, imgtype, 'NumFolders', numFolders, ...
         'NumImages', 20, 'OutputPath', outputPath);
 
 

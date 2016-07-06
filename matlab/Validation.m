@@ -43,7 +43,7 @@ function [confusionMatrix] = Validation(imgpath, type, varargin)
     outputPath = p.Results.OutputPath;
     offset = p.Results.Offset;
 
-    fprintf('Validation script for camera identification\n');
+    fprintf('\nValidation script for camera identification\n');
 
     start_time = clock;
     images = getImagesPath(imgpath, type, 'NumFolders', numFolders, ...
