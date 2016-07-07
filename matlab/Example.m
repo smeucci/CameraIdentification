@@ -1,21 +1,52 @@
-% Camera identification example
+% Example
 
-'Example - Do the three images represent the same camera that took the image Pxxx.jpg?'
-im1 = './Images/P1.jpg',
-im2 = './Images/P2.jpg',
-im3 = './Images/P3.jpg',
-Images(1).name = im1;  Images(2).name = im2;  Images(3).name = im3; 
-RP = getFingerprint(Images);
-RP = rgb2gray1(RP);
-    sigmaRP = std2(RP);
-Fingerprint = WienerInDFT(RP,sigmaRP);
+addpath('utils');
+addpath('Functions');
+addpath('Filter');
+addpath('rwt-master/bin');
+addpath('ncuts');
 
-imx = './Images/Pxxx.jpg',
-Noisex = NoiseExtractFromImage(imx,2);
-Noisex = WienerInDFT(Noisex,std2(Noisex));
+fprintf('CameraIdentification main script\n\n');
 
-% The optimal detector (see publication "Large Scale Test of Sensor Fingerprint Camera Identification")
-Ix = double(rgb2gray(imread(imx)));
-C = crosscorr(Noisex,Ix.*Fingerprint);
-detection = PCE(C)
+imgpath = '../dataset/images/';  %dataset path
+validationPath = '../dataset/validation'; %validation path
 
+sourcePath = 'source/'; %where prnu data are stored (inside mat folder)
+outputPath = 'output/'; %where reference pattern are store (inside mat folder)
+
+numFolders = 3; %number of folders
+numImages = 5; %number of images from each folder
+imgtype = 'imgs_nat';
+
+
+%% Reference patterns extraction %%
+
+% Script for extracting and saving camera reference patters
+
+% 1) Extracts images PRNU and store them in source path directory
+% 2) Resizes PRNU to the same dimensions (for further processing)
+% 3) Computes weights matrix with PCE distances between each PRNU
+% 4) Clustering of images wrt weight matrix usign normalized cuts
+% 5) Reference pattern for each camera evaluation
+% 6) Store reference patterns in output path, cameras subfolder
+
+%If called with ExtractNoise set to false, PRNU and weight matrix are not
+%exracted and proceed to the reference patterns generation using weight
+%matrix found in source path
+
+
+CameraIdentification(imgpath, imgtype, 'NumFolders', numFolders, 'NumImages', ...
+        numImages, 'ExtractNoise', true, 'SourcePath', ...
+        sourcePath, 'OutputPath', outputPath, 'Threshold', 4*10^-5);    
+    
+
+%% Validation %%
+% Predict and evaluate results for prediction on a validation set
+
+% 1) Calls CameraValidation for each images in validation path (given num
+% folders and number of images from each folder)
+% 2) Plot confusion matrix of the results
+
+Validation(validationPath, imgtype, 'NumFolders', numFolders, ...
+        'NumImages', 5, 'OutputPath', outputPath);
+                                    
