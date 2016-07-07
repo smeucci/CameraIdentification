@@ -15,7 +15,7 @@ sourcePath = 'source/'; %where prnu data are stored (inside mat folder)
 outputPath = 'output/'; %where reference pattern are store (inside mat folder)
 
 numFolders = 3; %number of folders
-numImages = 5; %number of images from each folder
+numImages = 3; %number of images from each folder
 imgtype = 'imgs_nat';
 
 
@@ -48,5 +48,5 @@ CameraIdentification(imgpath, imgtype, 'NumFolders', numFolders, 'NumImages', ..
 % 2) Plot confusion matrix of the results
 
 Validation(validationPath, imgtype, 'NumFolders', numFolders, ...
-        'NumImages', 5, 'OutputPath', outputPath);
+        'NumImages', 2, 'OutputPath', outputPath);
                                     

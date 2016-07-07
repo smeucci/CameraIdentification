@@ -21,33 +21,33 @@ outputPath = 'output/'; %where reference pattern are store (inside mat folder)
 % imgpath -> device_name -> image_type
 
 % imgpath
-%     ??? galaxy3_dasara
-%     |   ??? imgs
-%     |   ??? imgs_nat
-%     |   ??? imgs_nat_fb
-%     |   ??? imgs_nat_fb_highres
-%     ??? ipad2_giulia
-%     |   ??? imgs
-%     |   ??? imgs_nat
-%     |   ??? imgs_nat_fb
-%     |   ??? imgs_nat_fb_highres
-%     ??? ...
+%     ___ galaxy3_dasara
+%     |   ___ imgs
+%     |   ___ imgs_nat
+%     |   ___ imgs_nat_fb
+%     |   ___ imgs_nat_fb_highres
+%     ___ ipad2_giulia
+%     |   ___ imgs
+%     |   ___ imgs_nat
+%     |   ___ imgs_nat_fb
+%     |   ___ imgs_nat_fb_highres
+%     ___ ...
 %
 % 
 % Validation path and img path have the same structures
 %
 % validationPath
-%     ??? galaxy3_dasara
-%     |   ??? imgs
-%     |   ??? imgs_nat
-%     |   ??? imgs_nat_fb
-%     |   ??? imgs_nat_fb_highres
-%     ??? ipad2_giulia
-%     |   ??? imgs
-%     |   ??? imgs_nat
-%     |   ??? imgs_nat_fb
-%     |   ??? imgs_nat_fb_highres
-%     ??? ...
+%     ___ galaxy3_dasara
+%     |   ___ imgs
+%     |   ___ imgs_nat
+%     |   ___ imgs_nat_fb
+%     |   ___ imgs_nat_fb_highres
+%     ___ ipad2_giulia
+%     |   ___ imgs
+%     |   ___ imgs_nat
+%     |   ___ imgs_nat_fb
+%     |   ___ imgs_nat_fb_highres
+%     ___ ...
 
 %  image types:
 %     - imgs: images of the sky
