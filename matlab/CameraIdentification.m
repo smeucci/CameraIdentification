@@ -202,7 +202,6 @@ function clusters = CameraIdentification(imgpath, type, varargin)
     images = cell2mat(images);
     
     %Starts normalized cuts algorithm
-    %To be implemented
     clusters = normalizedCuts(weights, 'Threshold', threshold, 'Type', 'NC');
     
     n_clusters = length(clusters);
