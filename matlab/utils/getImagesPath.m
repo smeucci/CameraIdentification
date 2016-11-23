@@ -69,7 +69,7 @@ function [images] = getImagesPath(dataset_path, type, varargin)
            count = 0; h = 1;
            
            if(~random)
-               while count < min(size(imgs, 1) - 1, numImages) && h < size(imgs, 1)
+               while count < min(size(imgs, 1), numImages) && h <= size(imgs, 1)
                    img = imgs(h);
                    h = h + 1;
                    if (~strcmp(img.name(1), '.') && ~strcmp(img.name, '..') && ~img.isdir)  
